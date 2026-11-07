@@ -5,6 +5,12 @@ file only says where things stand.
 
 ## State of the site (v1, live on bobdylan.app)
 
+- 7 Nov afternoon: manutd.wiki layout; masthead "BOB DYLAN" with "Fan site" above it (official logos declined —
+  see CLAUDE.md); harmonica mark and icons; site search; tour dates with Tickets / VIP / pre-sale links from
+  bobdylan.com (`tools/build_tour.py`, 19 dates at build) on home, Shows and upcoming setlist pages; Spotify
+  players: albums now (tap-to-load, in the album dialog, deep link `/albums/?a=<slug>`), songs once Spotify keys are
+  added as Worker secrets.
+
 - Worker `dylan` on bobdylan.app (www redirects to the apex) and dylan.richardmcallister.workers.dev.
   `/health`: setlist.fm OK, Anthropic OK, KV bound.
 - **Home:** hero with live counts and a studio-album cover strip; latest show with its first songs (live from
@@ -35,7 +41,10 @@ file only says where things stand.
 
 ## Next candidates
 
-1. Weekly scheduled task: run `build_setlists.py`, commit the JSON, push.
+1. Weekly scheduled task: run `build_setlists.py` and `build_tour.py` (tour weekly at least — ticket links
+   change), commit the JSON, push.
+1b. Spotify keys from Richard (developer.spotify.com app → `SPOTIFY_CLIENT_ID`, `SPOTIFY_CLIENT_SECRET` secrets);
+   `/health` shows spotify ok when they work.
 2. Fill the missing tours (see above).
 3. More "many lives" songs: Tangled Up in Blue (rewritten lyrics across versions — describe, never quote),
    All Along the Watchtower, Mr. Tambourine Man, Blowin' in the Wind.
