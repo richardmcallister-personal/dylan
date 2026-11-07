@@ -52,6 +52,7 @@ D.shell("songs");
       <div class="tile"><b class="num">${years.length}</b><span>different years · peak ${peak[0]} (${peak[1]})</span></div>
     </div>`;
 
+  h += `<div id="listen"></div>`;
   if (lives) {
     h += `<section class="sheet"><span class="tag">One song, many lives</span><h2 style="margin-top:8px">Through the years</h2><ol class="lives">` +
       lives.lives.map((l) => {
@@ -79,6 +80,10 @@ D.shell("songs");
       byYear[y].slice().reverse().map(([d, id, v, c, cc]) => `<li><a href="/concert/?id=${id}">${D.date(d)}</a> · ${D.esc(v)}, ${D.esc(c)} <span class="muted">${cc}</span></li>`).join("") + `</ul></details>`).join("") +
     `</section>`;
   M.innerHTML = h;
+  try {
+    const t = await D.get(`/api/spotify?q=${encodeURIComponent(s.n)}`);
+    if (t.id) document.getElementById("listen").innerHTML = `<section class="sheet"><h2>Listen</h2>${D.player("track", t.id, t.album ? `${t.name} · ${t.album}` : t.name)}</section>`;
+  } catch (e) {}
 })();
 </script>
 </body>

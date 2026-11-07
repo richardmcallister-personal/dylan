@@ -2,6 +2,8 @@
 (function () {
   const D = (window.D = {});
   D.NAME = "Dylan Notes";
+  // The site's own mark: a harmonica, drawn from scratch (not any official Dylan emblem).
+  D.MARK = '<svg class="mark" viewBox="0 0 48 48" aria-hidden="true"><rect x="3" y="14" width="42" height="20" rx="5" fill="var(--accent)"/><rect x="3" y="14" width="42" height="7" rx="3.5" fill="var(--on-black)"/><g fill="var(--black)"><rect x="8" y="24" width="4" height="6" rx="1"/><rect x="15" y="24" width="4" height="6" rx="1"/><rect x="22" y="24" width="4" height="6" rx="1"/><rect x="29" y="24" width="4" height="6" rx="1"/><rect x="36" y="24" width="4" height="6" rx="1"/></g></svg>';
 
   const NAV = [
     ["home", "/", "Home", '<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>'],
@@ -50,6 +52,19 @@
       : a.sp
       ? `<a class="btn" href="${a.sp}" target="_blank" rel="noopener">Spotify (related edition)</a>`
       : `<a class="btn" href="${a.ss}" target="_blank" rel="noopener">Search Spotify</a>`;
+  // Spotify player: a tap-to-load facade (no Spotify cookies or weight until the visitor asks for it).
+  D.spId = (url) => ((url || "").match(/open\.spotify\.com\/(album|track)\/([A-Za-z0-9]+)/) || []).slice(1);
+  D.player = (kind, id, label) =>
+    `<div class="player ${kind}" data-kind="${kind}" data-id="${id}"><button type="button" class="play" aria-label="Load Spotify player: ${D.esc(label)}">` +
+    `<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="currentColor"/><path d="M9.5 7.5v9l7-4.5z" fill="var(--paper)"/></svg>` +
+    `<span><b>Play ${kind === "album" ? "the album" : "the song"}</b><small>${D.esc(label)} · loads Spotify's player</small></span></button></div>`;
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest(".player .play");
+    if (!b) return;
+    const w = b.parentElement;
+    w.innerHTML = `<iframe title="Spotify player" src="https://open.spotify.com/embed/${w.dataset.kind}/${w.dataset.id}?utm_source=generator" width="100%" height="${w.dataset.kind === "album" ? 352 : 152}" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+    w.classList.add("on");
+  });
   D.qs = (k) => new URLSearchParams(location.search).get(k);
 
   // Theme: auto / light / dark, remembered per browser.
@@ -76,7 +91,7 @@
       "afterbegin",
       `<a class="skip" href="#main">Skip to content</a>
       <header class="mast"><div class="in">
-        <a class="brand" href="/" aria-label="${D.NAME} home"><b>Dylan<i>.</i>Notes</b><small>Unofficial fan site</small></a>
+        <a class="brand" href="/" aria-label="${D.NAME} home">${D.MARK}<b><em>Dylan</em> Notes</b></a>
         <nav class="nav" aria-label="Main">${nav}</nav>
       </div></header>`
     );
@@ -84,8 +99,7 @@
       "beforeend",
       `<nav class="tabbar" aria-label="Main">${tabs}</nav>
       <footer class="foot"><div class="in">
-        <div><b>${D.NAME}</b> is an unofficial fan site. It is not connected with Bob Dylan, his management, Columbia/Sony Music or the Bob Dylan Center.
-        For the official site, lyrics and tour dates, visit <a href="https://www.bobdylan.com/" rel="noopener">bobdylan.com</a>.</div>
+        <div><b>${D.NAME}</b> is a fan site, not connected with Bob Dylan, his management or his record label. Official site: <a href="https://www.bobdylan.com/" rel="noopener">bobdylan.com</a>.</div>
         <div>Concert and setlist data from <a href="https://www.setlist.fm/setlists/bob-dylan-23d6b8d3.html" rel="noopener">setlist.fm</a>, compiled by its users.
         Album artwork © the respective rights holders, shown small to identify each record, with links to its official page.</div>
         <div class="theme" role="group" aria-label="Theme">Theme

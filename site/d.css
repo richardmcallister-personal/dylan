@@ -46,10 +46,10 @@ p{margin:0 0 .8em}
 /* Masthead */
 .mast{background:var(--black);color:var(--on-black);min-height:64px}
 .mast .in{max-width:1200px;margin:0 auto;padding:0 16px;display:flex;align-items:center;gap:24px;min-height:64px}
-.brand{color:var(--on-black);text-decoration:none;display:flex;flex-direction:column;line-height:1}
-.brand b{font-family:var(--display);font-style:italic;font-weight:700;font-size:26px;letter-spacing:-.02em}
-.brand b i{color:var(--accent);font-style:italic}
-.brand small{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--on-black-muted);margin-top:4px}
+.brand{color:var(--on-black);text-decoration:none;display:flex;align-items:center;gap:10px;line-height:1}
+.brand .mark{width:38px;height:38px;flex:none}
+.brand b{font-family:var(--display);font-weight:400;font-size:26px;letter-spacing:-.02em}
+.brand b em{font-style:italic;font-weight:700}
 .nav{display:flex;gap:4px;margin-left:auto}
 .nav a{color:var(--on-black);text-decoration:none;padding:8px 12px;border-radius:999px;font-weight:500;font-size:15px}
 .nav a:hover{background:rgba(255,255,255,.08)}
@@ -205,3 +205,12 @@ details.yr-perf ul{margin:6px 0 0;padding-left:20px;font-size:14px}
 .theme{display:flex;gap:6px;align-items:center}
 .theme button{appearance:none;border:1px solid var(--rule);background:var(--paper);color:var(--ink);border-radius:999px;padding:4px 10px;font:13px var(--body);cursor:pointer}
 .theme button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+
+/* Spotify player facade */
+.player{margin-top:14px;border-radius:12px;overflow:hidden}
+.player .play{appearance:none;width:100%;display:flex;align-items:center;gap:12px;text-align:left;cursor:pointer;background:var(--tint);color:var(--accent-ink);border:1px solid var(--rule);border-radius:12px;padding:14px 16px;font:inherit}
+.player .play svg{width:40px;height:40px;flex:none}
+.player .play b{display:block;color:var(--ink);font-weight:600}
+.player .play small{display:block;color:var(--muted);font-size:13px}
+.player.track.on{height:152px}.player.album.on{height:352px}
+.player iframe{display:block;border:0}

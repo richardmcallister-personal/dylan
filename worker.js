@@ -95,12 +95,69 @@ async function health(env) {
       out.anthropic.error = String(e);
     }
   }
+  out.spotify = { ok: false };
+  try {
+    await spotifyToken(env);
+    out.spotify.ok = true;
+  } catch (e) {
+    out.spotify.error = e.msg || String(e);
+  }
   return json(out);
+}
+
+// Spotify: app token via client credentials (secrets SPOTIFY_CLIENT_ID / SPOTIFY_CLIENT_SECRET), cached in KV.
+async function spotifyToken(env) {
+  if (!env.SPOTIFY_CLIENT_ID || !env.SPOTIFY_CLIENT_SECRET) throw { status: 503, msg: "Spotify not configured" };
+  const cached = env.DYLAN_CACHE && (await env.DYLAN_CACHE.get("spotify:token"));
+  if (cached) return cached;
+  const r = await fetch("https://accounts.spotify.com/api/token", {
+    method: "POST",
+    headers: { "content-type": "application/x-www-form-urlencoded", authorization: "Basic " + btoa(env.SPOTIFY_CLIENT_ID + ":" + env.SPOTIFY_CLIENT_SECRET) },
+    body: "grant_type=client_credentials",
+  });
+  if (!r.ok) throw { status: 502, msg: "Spotify token " + r.status };
+  const t = await r.json();
+  if (env.DYLAN_CACHE) await env.DYLAN_CACHE.put("spotify:token", t.access_token, { expirationTtl: Math.max(60, (t.expires_in || 3600) - 120) });
+  return t.access_token;
+}
+
+// Best Bob Dylan recording of a song title on Spotify. Cached 30 days (misses 7 days).
+async function spotifyTrack(env, title) {
+  const clean = title.replace(/\s*\(.*?\)\s*/g, " ").trim() || title;
+  const key = "spotify:track:v1:" + clean.toLowerCase();
+  if (env.DYLAN_CACHE) {
+    const hit = await env.DYLAN_CACHE.get(key, "json");
+    if (hit) return hit;
+  }
+  const token = await spotifyToken(env);
+  const q = encodeURIComponent(`track:"${clean}" artist:"Bob Dylan"`);
+  const r = await fetch(`https://api.spotify.com/v1/search?type=track&limit=10&q=${q}`, { headers: { authorization: "Bearer " + token } });
+  if (!r.ok) throw { status: 502, msg: "Spotify search " + r.status };
+  const items = ((await r.json()).tracks || {}).items || [];
+  const norm = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const dylan = items.filter((t) => (t.artists || []).some((a) => a.name === "Bob Dylan"));
+  // Prefer an exact title match on a studio album, then any exact match, then the first Dylan track.
+  const exact = dylan.filter((t) => norm(t.name.replace(/\s*-\s.*$/, "")) === norm(clean));
+  const pick = exact.find((t) => t.album && t.album.album_type === "album") || exact[0] || dylan[0] || null;
+  const out = pick ? { id: pick.id, name: pick.name, album: pick.album && pick.album.name } : { id: null };
+  if (env.DYLAN_CACHE) await env.DYLAN_CACHE.put(key, JSON.stringify(out), { expirationTtl: pick ? 86400 * 30 : 86400 * 7 });
+  return out;
 }
 
 async function api(url, env) {
   const p = url.pathname;
   try {
+    if (p === "/api/spotify") {
+      const q = (url.searchParams.get("q") || "").slice(0, 120);
+      if (!q) return json({ error: "q required" }, 400);
+      // Always 200: pages simply show no player when there is no match or Spotify isn't configured.
+      try {
+        const t = await spotifyTrack(env, q);
+        return json(t, 200, t.id ? 86400 : 3600);
+      } catch (e) {
+        return json({ id: null, error: e.msg || String(e) }, 200);
+      }
+    }
     // Newest shows (page 1), slimmed. Used by the home and concerts pages.
     if (p === "/api/latest") {
       const d = await sfm(env, `/artist/${MBID}/setlists?p=1`, 1800);
