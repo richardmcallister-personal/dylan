@@ -297,3 +297,7 @@ footer.mu a{color:var(--ink)}
 .timeline-event time{color:var(--muted);font-variant-numeric:tabular-nums}
 .timeline-event p{margin:3px 0}
 @media(max-width:480px){.timeline-event{grid-template-columns:1fr;gap:2px}.book-art{height:165px}.book-art img{max-height:145px}}
+.artist-heading{display:flex;align-items:center;gap:16px;margin-bottom:14px}
+.artist-heading img{display:block;width:clamp(90px,9vw,116px);height:auto;aspect-ratio:1;object-fit:contain;background:var(--tint)}
+.artist-heading h3{margin:0 0 5px}
+.artist-heading a{font-size:14px;font-weight:600}
