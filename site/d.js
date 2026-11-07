@@ -2,10 +2,6 @@
 (function () {
   const D = (window.D = {});
   D.NAME = "Bob Dylan";
-  D.TAG = "Fan site";
-  // The site's own mark: a harmonica, drawn from scratch (not any official Dylan emblem).
-  D.MARK = '<svg class="mark" viewBox="0 0 48 48" aria-hidden="true"><rect x="3" y="14" width="42" height="20" rx="5" fill="var(--black)"/><rect x="3" y="14" width="42" height="7" rx="3.5" fill="var(--on-red)"/><g fill="var(--red)"><rect x="8" y="24" width="4" height="6" rx="1"/><rect x="15" y="24" width="4" height="6" rx="1"/><rect x="22" y="24" width="4" height="6" rx="1"/><rect x="29" y="24" width="4" height="6" rx="1"/><rect x="36" y="24" width="4" height="6" rx="1"/></g></svg>';
-
   const NAV = [
     ["home", "/", "Home", '<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>'],
     ["albums", "/albums/", "Albums", '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1"/>'],
@@ -105,7 +101,7 @@
       "afterbegin",
       `<a class="skip" href="#main">Skip to content</a>
       <div class="mast"><div class="wrap">
-        <header class="mu"><a class="brand" href="/" aria-label="${D.NAME} ${D.TAG.toLowerCase()}, home">${D.MARK}<span class="nm"><small>${D.TAG}</small><b>${D.NAME}</b></span></a></header>
+        <header class="mu"><a class="brand" href="/" aria-label="Bob Dylan home"><img src="/assets/bob-dylan.png" width="604" height="79" alt="Bob Dylan"></a></header>
         <nav class="munav" aria-label="Main">${nav}<div class="musearch" role="search"><input type="search" id="q-site" placeholder="Search songs and albums" aria-label="Search songs and albums" autocomplete="off"><div class="hits" hidden></div></div></nav>
       </div></div>`
     );
@@ -113,9 +109,7 @@
       "beforeend",
       `<nav class="tabbar" aria-label="Main">${tabs}</nav>
       <footer class="mu wrap">
-        <div>This is a fan site, not connected with Bob Dylan, his management or his record label. Official site: <a href="https://www.bobdylan.com/" rel="noopener">bobdylan.com</a>.</div>
-        <div>Concert and setlist data from <a href="https://www.setlist.fm/setlists/bob-dylan-23d6b8d3.html" rel="noopener">setlist.fm</a>, compiled by its users. Tour dates and ticket links from bobdylan.com.
-        Album artwork © the respective rights holders, shown small to identify each record, with links to its official page.</div>
+        <div>Setlists from <a href="https://www.setlist.fm/setlists/bob-dylan-23d6b8d3.html" rel="noopener">setlist.fm</a>. Tour dates and tickets from <a href="https://www.bobdylan.com/on-tour/" rel="noopener">bobdylan.com</a>.</div>
         <div class="theme" role="group" aria-label="Theme"><span>Theme</span><button type="button" data-t="auto">Auto</button><button type="button" data-t="light">Light</button><button type="button" data-t="dark">Dark</button></div>
       </footer>`
     );

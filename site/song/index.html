@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Song · Bob Dylan fan site</title>
+<title>Song · Bob Dylan</title>
 <meta name="description" content="One Bob Dylan song through the years: recordings and every live performance on record.">
 <link rel="preload" href="/fonts/anton-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/d.css">
@@ -27,7 +27,7 @@ D.shell("songs");
     M.innerHTML = `<div class="head"><h1>Song not found</h1><p>No live performance of that song is on record. <a href="/songs/">Browse all songs</a>.</p></div>`;
     return;
   }
-  document.title = `${s.n} · Bob Dylan fan site`;
+  document.title = `${s.n} · Bob Dylan`;
   const rank = songs.indexOf(s) + 1;
   const [perf, lives, albums] = await Promise.all([
     D.get(`/data/song/${slug}.json`),

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Setlist · Bob Dylan fan site</title>
+<title>Setlist · Bob Dylan</title>
 <meta name="description" content="A Bob Dylan setlist, song by song.">
 <link rel="preload" href="/fonts/anton-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/d.css">
@@ -27,7 +27,7 @@ D.shell("concerts");
     M.innerHTML = `<div class="head"><h1>Show not found</h1><p><a href="/concerts/">Browse all shows</a>.</p></div>`;
     return;
   }
-  document.title = `${s.v}, ${D.date(s.d)} · Bob Dylan fan site`;
+  document.title = `${s.v}, ${D.date(s.d)} · Bob Dylan`;
   const songs = await D.get("/data/songs.json");
   const known = Object.fromEntries(songs.map((x) => [x.s, x]));
   const total = s.sets.reduce((t, x) => t + x.s.length, 0);

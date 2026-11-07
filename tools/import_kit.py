@@ -4,9 +4,7 @@
 Usage: python3 tools/import_kit.py <path-to-dylan-resource-kit>
 
 Writes site/covers/<slug>.webp (max 320 px) and site/data/albums.json.
-The kit's official-site wordmark, Bob Dylan Center logos/photos and eye emblem
-are deliberately NOT imported: no reuse permission, and they would make the
-fan site look official.
+The masthead and Center feature assets are maintained separately in site/assets/.
 """
 import json, subprocess, sys
 from pathlib import Path

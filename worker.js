@@ -1,10 +1,10 @@
-// Dylan fan site Worker: serves ./site and proxies setlist.fm with a KV cache.
+// Dylan Worker: serves ./site and proxies setlist.fm with a KV cache.
 // Secrets (Worker settings, never in the repo): SETLISTFM_KEY, ANTHROPIC_API_KEY.
 // KV: DYLAN_CACHE.
 
 const MBID = "72c536dc-7137-4477-a521-567eeb840fa8"; // Bob Dylan on MusicBrainz / setlist.fm
 const SFM = "https://api.setlist.fm/rest/1.0";
-const UA = "dylan-fansite/1.0 (+https://github.com/richardmcallister-personal/dylan)";
+const UA = "bobdylan.app/1.0 (+https://github.com/richardmcallister-personal/dylan)";
 
 const json = (data, status = 200, maxAge = 0) =>
   new Response(JSON.stringify(data), {

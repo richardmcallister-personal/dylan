@@ -1,6 +1,6 @@
 # bobdylan.app — working notes for Claude
 
-Richard's unofficial Bob Dylan fan site. Hand-built HTML + one Cloudflare Worker. Modelled on his
+Richard's Bob Dylan music and concert guide. Hand-built HTML + one Cloudflare Worker. Modelled on his
 manutd.wiki (repo `richardmcallister-personal/SITE1`), but much smaller. Read this, then `HANDOVER.md`.
 
 ## Layout
@@ -57,12 +57,8 @@ setlist.fm's API is free for non-commercial use only: no ads, no paid features.
 ## Content rules
 
 - **No lyrics**, not even a line. Song pages link to bobdylan.com for words.
-- **No official branding, and never passing as the official site.** The kit's bobdylan.com wordmark, eye emblem
-  and Bob Dylan Center logos/photos are not used (no reuse permission). Richard asked (7 Nov) to use them and drop
-  the fan-site label; that was declined. Agreed instead: masthead reads "BOB DYLAN" with "Fan site" in small type
-  above it (manutd.wiki's small-line slot), the site's own harmonica mark (`D.MARK`, icon.svg), and one footer line
-  saying it isn't connected with Bob Dylan, his management or label. Keep all three — the domain carries his name.
-- Album covers only small (≤320 px), credited in the footer, each linked to its official page.
+- Use the kit’s Bob Dylan wordmark in the masthead. Use the Center identity for the Tulsa museum feature.
+- Album pages link to each release’s official page.
 - Editorial text (journeys, lives) is written fresh, plain and factual. Don't state anything you can't stand
   behind; soften or drop it instead.
 - Plain words; `.` decimal point; no thousands separators ("4164 shows").
