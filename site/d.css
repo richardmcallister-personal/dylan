@@ -46,8 +46,7 @@ main p{max-width:80ch}
 :focus-visible{outline:2px solid var(--red-ink);outline-offset:2px}
 
 /* Masthead: header + section bar form one sticky red band, full-bleed */
-.mast{position:sticky;top:0;z-index:30;margin:0 calc(50% - 50vw);background:var(--red);color:var(--on-red)}
-.mast .wrap{padding:0 max(16px,env(safe-area-inset-left))}
+.mast{position:sticky;top:0;z-index:30;margin:0 calc(50% - 50vw);padding:0 max(16px,env(safe-area-inset-right)) 0 max(16px,env(safe-area-inset-left));background:var(--red);color:var(--on-red)}
 header.mu{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:64px;padding:12px 0 6px}
 .brand{display:flex;align-items:center;gap:12px;color:var(--on-red);text-decoration:none;min-width:0}
 .brand .mark{width:40px;height:40px;flex:none}
@@ -173,7 +172,7 @@ dialog::backdrop{background:rgba(0,0,0,.55)}
 
 /* Gig rows (fixture-list style): date left, venue middle, action right */
 .gigs{list-style:none;margin:0;padding:0}
-.gigs li{display:grid;grid-template-columns:86px minmax(0,1fr) auto;gap:12px;padding:10px 0;border-top:1px solid var(--rule);align-items:center}
+.gigs li{display:grid;grid-template-columns:76px minmax(0,1fr);gap:4px 12px;padding:10px 0;border-top:1px solid var(--rule);align-items:center}
 .gigs li:first-child{border-top:0}
 .gigs .d{display:flex;flex-direction:column;font-size:13px;font-weight:600;line-height:1.2}
 .gigs .d b{font-family:var(--brand);font-weight:400;font-size:24px;letter-spacing:.01em;line-height:1}
@@ -182,8 +181,9 @@ dialog::backdrop{background:rgba(0,0,0,.55)}
 .gigs .o small{display:block;font-weight:400;color:var(--muted);font-size:13px;margin-top:2px}
 .gigs .o a{color:inherit;text-decoration:none}
 .gigs .o a:hover{color:var(--red-ink)}
-.gigs .a{display:flex;gap:6px;justify-content:flex-end;flex-wrap:wrap}
-@media (max-width:640px){.gigs li{grid-template-columns:62px minmax(0,1fr)}.gigs .a{grid-column:2;justify-content:flex-start}}
+.gigs .a{grid-column:2;display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.gigs li{align-items:start}
+@media (max-width:640px){.gigs li{grid-template-columns:62px minmax(0,1fr)}}
 
 /* Stat tiles */
 .tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}
