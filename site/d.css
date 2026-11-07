@@ -311,7 +311,7 @@ footer.mu a{color:var(--ink)}
 .related-links{display:flex;flex-wrap:wrap;gap:6px 16px;margin:8px 0;font-size:14px}
 
 /* Site footer: dark full-width band — brand, sections, official links, then notes and theme (manutd.wiki pattern) */
-footer.mu.full{position:relative;isolation:isolate;display:block;max-width:none;margin-top:40px;padding:40px 0 28px;color:var(--on-foot-muted);font-size:13px}
+footer.mu.full{position:relative;isolation:isolate;display:block;margin-top:40px;padding:40px 0 28px;color:var(--on-foot-muted);font-size:13px}
 footer.mu.full::before{content:"";position:absolute;z-index:-1;top:0;bottom:0;left:calc(50% - 50vw);right:calc(50% - 50vw);background:var(--foot)}
 footer.mu.full a{color:var(--on-foot)}
 body:has(footer.mu.full){padding-bottom:0}
