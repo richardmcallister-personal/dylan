@@ -8,6 +8,7 @@
     ["concerts", "/concerts/", "Shows", '<path d="M4 20h16M6 20V9l6-5 6 5v11"/><path d="M10 20v-5h4v5"/>'],
     ["journeys", "/journeys/", "Journeys", '<path d="M3 17c4 0 4-10 9-10s5 10 9 10"/><circle cx="3" cy="17" r="1.5"/><circle cx="21" cy="17" r="1.5"/>'],
   ];
+  const archiveNav = [["books", "/books/", "Books"], ["influences", "/influences/", "Influences"], ["timeline", "/timeline/", "Timeline"]];
   const ic = (p) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
 
   D.esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -94,7 +95,7 @@
   };
 
   D.shell = (page) => {
-    const nav = NAV.map(([k, href, label]) => `<a href="${href}"${k === page ? ' aria-current="page"' : ""}>${label}</a>`).join("");
+    const nav = [...NAV, ...archiveNav].map(([k, href, label]) => `<a class="${archiveNav.some(([id]) => id === k) ? "archive-link" : "main-link"}" href="${href}"${k === page ? ' aria-current="page"' : ""}>${label}</a>`).join("");
     const tabs = NAV.map(([k, href, label, p]) => `<a href="${href}"${k === page ? ' aria-current="page"' : ""}>${ic(p)}<span>${label}</span></a>`).join("");
     document.body.insertAdjacentHTML(
       "afterbegin",

@@ -1,0 +1,11 @@
+(async function () {
+  const artists = await D.get("/data/influences.json");
+  const groups = [["roots","Artists who influenced Dylan"],["legacy","Artists Dylan influenced"]];
+  document.querySelector("#connections").innerHTML = groups.map(([id,title]) =>
+    '<section class="influence-group" id="'+id+'"><h2>'+title+'</h2><div class="influence-list">'+
+    artists.filter(a => a.direction === title).map(a =>
+      '<article><h3>'+D.esc(a.name)+'</h3><p>'+D.esc(a.note)+'</p><a href="'+D.esc(a.source)+'">'+D.esc(new URL(a.source).hostname.replace(/^www\./,""))+'</a></article>').join("")+
+    '</div></section>').join("");
+  document.querySelector("#status").hidden = true;
+  if (location.hash === "#roots" || location.hash === "#legacy") document.querySelector(location.hash).scrollIntoView();
+})().catch(() => {document.querySelector("#status").textContent="The influences could not load. Please reload the page.";});
