@@ -301,3 +301,11 @@ footer.mu a{color:var(--ink)}
 .artist-heading img{display:block;width:clamp(90px,9vw,116px);height:auto;aspect-ratio:1;object-fit:contain;background:var(--tint)}
 .artist-heading h3{margin:0 0 5px}
 .artist-heading a{font-size:14px;font-weight:600}
+.hits section h3{margin:0;padding:8px 12px;background:var(--tint);font:650 13px var(--body)}
+.hits section h3 small{display:inline;font-weight:400;margin-left:4px}
+.hits a:not(:has(img)){grid-template-columns:1fr}
+.hits button{margin:8px 12px;padding:6px 10px;font:inherit;color:var(--red-ink);background:var(--paper);border:1px solid var(--bar);border-radius:8px;cursor:pointer}
+.influence-list article[id],.rail-card[id]{scroll-margin-top:185px}
+.linked-milestone.rail-card{display:block;grid-column:1/-1;padding:14px}
+.linked-milestone p{margin:4px 0}
+.related-links{display:flex;flex-wrap:wrap;gap:6px 16px;margin:8px 0;font-size:14px}

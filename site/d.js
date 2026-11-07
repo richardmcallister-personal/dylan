@@ -37,7 +37,7 @@
       fetch(url).then((r) => {
         if (!r.ok) throw new Error(url + " " + r.status);
         return r.json();
-      }));
+      }).catch(error => { delete memo[url]; throw error; }));
   D.albums = () => D.get("/data/albums.json");
   D.album = async (slug) => (await D.albums()).find((a) => a.s === slug);
   D.CAT = { studio: "Studio", live: "Live", comp: "Compilation", bootleg: "Bootleg Series" };
@@ -102,7 +102,7 @@
       `<a class="skip" href="#main">Skip to content</a>
       <div class="mast"><div class="wrap">
         <header class="mu"><a class="brand" href="/" aria-label="Bob Dylan home"><img class="emblem" src="/assets/dylan-eye.png" width="344" height="344" alt=""><img class="wordmark" src="/assets/bob-dylan.png" width="604" height="79" alt="Bob Dylan"></a></header>
-        <nav class="munav" aria-label="Main">${nav}<div class="musearch" role="search"><input type="search" id="q-site" placeholder="Search songs and albums" aria-label="Search songs and albums" autocomplete="off"><div class="hits" hidden></div></div></nav>
+        <nav class="munav" aria-label="Main">${nav}<div class="musearch" role="search"><input type="search" id="q-site" placeholder="Search the archive" aria-label="Search the archive" autocomplete="off"><div class="hits" hidden></div></div></nav>
       </div></div>`
     );
     document.body.insertAdjacentHTML(
@@ -121,38 +121,77 @@
     search();
   };
 
-  // Site search: songs and albums, built on first focus.
   function search() {
-    const inp = document.getElementById("q-site"), box = inp.nextElementSibling;
-    let idx = null, sel = -1, items = [];
-    const norm = (s) => s.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[’']/g, "");
-    const load = async () => {
-      if (idx) return idx;
-      const [songs, albums] = await Promise.all([D.get("/data/songs.json"), D.albums()]);
-      idx = albums.map((a) => ({ k: "a", n: a.t, t: norm(a.t), h: "/albums/?a=" + a.s, sub: a.y + " · " + a.c.map((c) => D.CAT[c]).join(", "), a, w: 1000 }))
-        .concat(songs.map((s) => ({ k: "s", n: s.n, t: norm(s.n), h: "/song/?s=" + s.s, sub: s.k + " times live" + (s.c ? " · " + s.c + " cover" : ""), w: s.k })));
-      return idx;
-    };
-    const draw = () => {
-      if (!inp.value.trim()) { box.hidden = true; return; }
-      box.hidden = false;
-      box.innerHTML = items.length
-        ? items.map((x, i) => `<a href="${x.h}"${i === sel ? ' class="sel"' : ""}>${x.k === "a" ? D.cover(x.a, 44, 'alt=""') : '<span class="ic">Song</span>'}<span><b>${D.esc(x.n)}</b><small>${D.esc(x.sub)}</small></span></a>`).join("")
-        : `<div class="none">Nothing matches “${D.esc(inp.value)}”.</div>`;
-    };
-    inp.addEventListener("focus", load);
-    inp.addEventListener("input", async () => {
-      const q = norm(inp.value.trim());
-      const all = await load();
-      items = q ? all.filter((x) => x.t.includes(q)).sort((a, b) => (b.t.startsWith(q) - a.t.startsWith(q)) || b.w - a.w).slice(0, 8) : [];
-      sel = -1; draw();
+    const input = document.getElementById("q-site");
+    const box = input.nextElementSibling;
+    const normalize = s => String(s).normalize("NFKD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/['’]/g,"").replace(/[^\p{L}\p{N}]+/gu," ").trim();
+    let index, selected = -1, visible = [], groups = [], limit = 4, revision = 0;
+    async function build() {
+      const [songs, albums, books, artists, milestones, days, journeys] = await Promise.all(
+        ["songs","albums","books","influences","milestones","otd","journeys"].map(name=>D.get("/data/"+name+".json")));
+      const rows = [];
+      function add(group,title,detail,url,extra="",weight=0,image="") {
+        rows.push({group,title,detail,url,weight,image,key:normalize(title),text:normalize([title,detail,extra].join(" "))});
+      }
+      for(const a of albums) add("Albums",a.t,a.y+" · "+a.c.map(k=>D.CAT[k]).join(", "),"/albums/?a="+a.s,"",0,"/covers/"+a.s+".webp");
+      for(const s of songs) add("Songs",s.n,s.k+" times live"+(s.c?" · "+s.c+" cover":""),"/song/?s="+s.s,"",s.k);
+      for(const b of books) add("Books",b.title,b.author,"/books/?q="+encodeURIComponent(b.title),[b.category,b.subtitle].filter(Boolean).join(" "));
+      for(const a of artists) add("Artists",a.name,a.direction,"/influences/#artist-"+D.slug(a.name),a.note);
+      for(const e of milestones) add("Milestones",e.title,e.date+" · "+e.kind,"/timeline/?y="+e.date.slice(0,4)+"#milestone-"+D.slug(e.title),e.note);
+      for(const [md,shows] of Object.entries(days)) for(const [year,id,venue,city,country] of shows) {
+        const date=year+"-"+md;
+        add("Concerts",venue,[city,country,D.date(date)].filter(Boolean).join(" · "),"/concert/?id="+id,date);
+      }
+      for(const j of journeys) add("Journeys",j.title,j.years,"/journeys/#"+j.id,j.intro);
+      return rows;
+    }
+    function draw() {
+      visible=[];
+      box.innerHTML=groups.map(([name,rows])=>{
+        const links=rows.slice(0,limit).map(r=>{
+          visible.push(r);
+          return '<a href="'+D.esc(r.url)+'">'+(r.image?'<img src="'+D.esc(r.image)+'" alt="" width="44" height="44">':'')+
+            '<span><b>'+D.esc(r.title)+'</b><small>'+D.esc(r.detail)+'</small></span></a>';
+        }).join("");
+        return '<section><h3>'+name+' <small>'+rows.length+'</small></h3>'+links+'</section>';
+      }).join("") || '<div class="none">Nothing matches “'+D.esc(input.value)+'”.</div>';
+      if(groups.some(([,rows])=>rows.length>limit)) box.insertAdjacentHTML("beforeend",'<button type="button">Show more matches</button>');
+      box.hidden=false;
+    }
+    async function update() {
+      const token=++revision, q=normalize(input.value);
+      selected=-1; visible=[]; limit=4;
+      if(!q){box.hidden=true;return;}
+      try {
+        index ||= build().catch(err=>{index=null;throw err;});
+        const rows=await index;
+        if(token!==revision || document.activeElement!==input) return;
+        const words=q.split(" ");
+        const hits=rows.filter(r=>words.every(w=>r.text.includes(w)));
+        const score=r=>r.key===q?4:r.key.startsWith(q)?3:r.key.includes(q)?2:r.text.includes(q)?1:0;
+        hits.sort((a,b)=>score(b)-score(a)||b.weight-a.weight||a.title.localeCompare(b.title));
+        const buckets=new Map();
+        for(const r of hits){if(!buckets.has(r.group)) buckets.set(r.group,[]);buckets.get(r.group).push(r);}
+        groups=[...buckets];draw();
+      } catch {
+        if(token===revision){box.innerHTML='<div class="none">Search could not load. Try again.</div>';box.hidden=false;}
+      }
+    }
+    input.addEventListener("input",update);
+    input.addEventListener("focus",update);
+    input.addEventListener("keydown",e=>{
+      if(e.key==="Escape"){revision++;input.value="";box.hidden=true;input.blur();return;}
+      if(box.hidden || !visible.length)return;
+      if(e.key==="Enter"){e.preventDefault();location.href=visible[Math.max(selected,0)].url;return;}
+      if(e.key!=="ArrowDown" && e.key!=="ArrowUp") return;
+      e.preventDefault();
+      selected=Math.max(0,Math.min(visible.length-1,selected+(e.key==="ArrowDown"?1:-1)));
+      const links=box.querySelectorAll("a");
+      links.forEach((a,i)=>a.classList.toggle("sel",i===selected));
+      links[selected].scrollIntoView({block:"nearest"});
     });
-    inp.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); sel = Math.max(-1, Math.min(items.length - 1, sel + (e.key === "ArrowDown" ? 1 : -1))); draw(); }
-      else if (e.key === "Enter" && items.length) { location.href = items[Math.max(0, sel)].h; }
-      else if (e.key === "Escape") { inp.value = ""; box.hidden = true; inp.blur(); }
-    });
-    document.addEventListener("click", (e) => { if (!e.target.closest(".musearch")) box.hidden = true; });
+    box.addEventListener("click",e=>{if(e.target.closest("button")){const top=box.scrollTop;limit+=10;selected=-1;draw();box.scrollTop=top;}});
+    document.addEventListener("click",e=>{if(!e.target.closest(".musearch")){revision++;box.hidden=true;}});
   }
 
   // Year bar chart: {yyyy: n} → bars from first..last year (or given range).

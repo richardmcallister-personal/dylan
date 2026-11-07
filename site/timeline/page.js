@@ -24,6 +24,11 @@
     button.dataset.decade = String(d);
     decades.append(button);
   }
+  function relatedLinks(e) {
+    if (!e.related) return "";
+    const links = e.related.map(r=>'<a href="'+D.esc(r.href)+'">'+D.esc(r.label)+'</a>').join("");
+    return '<div class="related-links">'+links+'<a href="'+D.esc(e.source)+'">Historical source · Smithsonian</a></div>';
+  }
   function drawRail() {
     const kind = kindSelect.value;
     for(const button of decades.children) button.setAttribute("aria-pressed", Number(button.dataset.decade) === decade);
@@ -34,7 +39,9 @@
       const cards = items.map(e => {
         const slug = covers.get(e.link);
         const art = slug ? '<img src="/covers/'+D.esc(slug)+'.webp" loading="lazy" width="54" height="54" alt="">' : "";
-        return '<a class="rail-card" href="'+D.esc(e.link || e.source)+'">'+art+'<span><small>'+
+        const anchor = e.kind === "Album" ? "" : ' id="milestone-'+D.slug(e.title)+'"';
+        if(e.related) return '<article class="rail-card linked-milestone"'+anchor+'><small>'+D.esc(e.kind)+' · '+readable(e.date)+'</small><strong>'+D.esc(e.title)+'</strong><p>'+D.esc(e.note)+'</p>'+relatedLinks(e)+'</article>';
+        return '<a'+anchor+' class="rail-card" href="'+D.esc(e.link || e.source)+'">'+art+'<span><small>'+
           D.esc(e.kind)+(e.date.length>4?' · '+readable(e.date):'')+'</small><strong>'+D.esc(e.title)+'</strong></span></a>';
       }).join("");
       const concerts = shows ? '<button type="button" class="rail-shows" data-year="'+year+'">'+shows+' '+(shows===1?'concert':'concerts')+' →</button>' : "";
@@ -66,7 +73,7 @@
   function row(e) {
     const title=e.link ? '<a href="'+D.esc(e.link)+'">'+D.esc(e.title)+'</a>' : D.esc(e.title);
     return '<article class="timeline-event"><time datetime="'+D.esc(e.date)+'">'+readable(e.date)+'</time><div><small class="muted">'+D.esc(e.kind)+'</small><h3>'+title+'</h3>'+
-      (e.note?'<p>'+D.esc(e.note)+'</p>':'')+(e.source?'<a class="small" href="'+D.esc(e.source)+'">Source</a>':'')+'</div></article>';
+      (e.note?'<p>'+D.esc(e.note)+'</p>':'')+(e.related?relatedLinks(e):e.source?'<a class="small" href="'+D.esc(e.source)+'">Source</a>':'')+'</div></article>';
   }
   function render() {
     const kind=kindSelect.value, showConcerts=!kind || kind==="Concerts";
@@ -108,4 +115,5 @@
   if(years.includes(D.qs("y"))) yearSelect.value=D.qs("y");
   yearSelect.addEventListener("change",render);kindSelect.addEventListener("change",render);render();
   document.querySelector("#status").hidden=true;
+  if(location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
 })().catch(() => {document.querySelector("#status").textContent="The timeline could not load. Please reload the page.";});

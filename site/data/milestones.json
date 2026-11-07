@@ -32,7 +32,21 @@
     "kind": "Music",
     "title": "An electric set at Newport",
     "note": "Dylan takes the Newport Folk Festival stage with an electric band.",
-    "source": "https://www.smithsonianmag.com/smithsonian-institution/july-25-1965-dylan-goes-electric-at-the-newport-folk-festival-114743/"
+    "source": "https://www.smithsonianmag.com/smithsonian-institution/july-25-1965-dylan-goes-electric-at-the-newport-folk-festival-114743/",
+    "related": [
+      {
+        "label": "Setlist · Newport, 25 July 1965",
+        "href": "/concert/?id=3bd7b098"
+      },
+      {
+        "label": "Listen · Going electric",
+        "href": "/journeys/#electric"
+      },
+      {
+        "label": "Read · Dylan Goes Electric! by Elijah Wald",
+        "href": "/books/?q=Dylan+Goes+Electric%21"
+      }
+    ]
   },
   {
     "date": "1971",
