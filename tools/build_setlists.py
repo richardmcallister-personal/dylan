@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Build the concert and song data from setlist.fm, through the site's own Worker.
 
-Usage: python3 tools/build_setlists.py [--base https://dylan.richardmcallister.workers.dev] [--max-pages N]
+Usage: python3 tools/build_setlists.py [--base https://bobdylan.app] [--max-pages N]
 
 The Worker holds the setlist.fm key and caches pages in KV; this script never sees the key.
 setlist.fm allows about 2 requests a second, so pages are fetched ~0.7 s apart.
@@ -17,7 +17,7 @@ import argparse, collections, datetime, json, re, sys, time, unicodedata, urllib
 from pathlib import Path
 
 ap = argparse.ArgumentParser()
-ap.add_argument("--base", default="https://dylan.richardmcallister.workers.dev")
+ap.add_argument("--base", default="https://bobdylan.app")
 ap.add_argument("--max-pages", type=int, default=0)
 args = ap.parse_args()
 
