@@ -123,7 +123,7 @@
     document.body.insertAdjacentHTML(
       "beforeend",
       `<nav class="tabbar" aria-label="Main">${tabs}</nav>
-      <footer class="mu wrap big">${siteFooter()}
+      <footer class="mu wrap full">${siteFooter()}
         <div class="fnotes">
           <p>This is a fan site, not connected with Bob Dylan, his management or his record label. For the official site, lyrics and news, go to <a href="https://www.bobdylan.com/" rel="noopener">bobdylan.com</a>.</p>
           <p>Setlists from <a href="https://www.setlist.fm/setlists/bob-dylan-23d6b8d3.html" rel="noopener">setlist.fm</a>, compiled by its users. Tour dates and ticket links from <a href="https://www.bobdylan.com/on-tour/" rel="noopener">bobdylan.com</a>. Album artwork © the respective rights holders, shown to identify each record.</p>

@@ -311,11 +311,11 @@ footer.mu a{color:var(--ink)}
 .related-links{display:flex;flex-wrap:wrap;gap:6px 16px;margin:8px 0;font-size:14px}
 
 /* Site footer: dark full-width band — brand, sections, official links, then notes and theme (manutd.wiki pattern) */
-footer.mu.big{position:relative;isolation:isolate;display:block;max-width:none;margin-top:40px;padding:40px 0 28px;color:var(--on-foot-muted);font-size:13px}
-footer.mu.big::before{content:"";position:absolute;z-index:-1;top:0;bottom:0;left:calc(50% - 50vw);right:calc(50% - 50vw);background:var(--foot)}
-footer.mu.big a{color:var(--on-foot)}
-body:has(footer.mu.big){padding-bottom:0}
-@media (max-width:640px){footer.mu.big{padding-top:28px;padding-bottom:calc(100px + env(safe-area-inset-bottom))}}
+footer.mu.full{position:relative;isolation:isolate;display:block;max-width:none;margin-top:40px;padding:40px 0 28px;color:var(--on-foot-muted);font-size:13px}
+footer.mu.full::before{content:"";position:absolute;z-index:-1;top:0;bottom:0;left:calc(50% - 50vw);right:calc(50% - 50vw);background:var(--foot)}
+footer.mu.full a{color:var(--on-foot)}
+body:has(footer.mu.full){padding-bottom:0}
+@media (max-width:640px){footer.mu.full{padding-top:28px;padding-bottom:calc(100px + env(safe-area-inset-bottom))}}
 .sitefoot{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,3fr);gap:32px;padding-bottom:28px;margin-bottom:20px;border-bottom:1px solid var(--foot-rule)}
 .sitefoot h2{font-family:var(--head);font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--on-foot);margin:0 0 12px}
 .sitefoot ul{list-style:none;margin:0;padding:0}
@@ -328,9 +328,9 @@ body:has(footer.mu.big){padding-bottom:0}
 .fcols{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
 .fnotes{display:grid;gap:8px;max-width:90ch;font-size:12px;line-height:1.6}
 .fnotes p{margin:0}
-footer.mu.big .theme{background:transparent;box-shadow:inset 0 0 0 1px var(--foot-rule);margin-top:6px}
-footer.mu.big .theme span{color:var(--on-foot-muted)}
-footer.mu.big .theme button{color:var(--on-foot);min-height:28px;min-width:44px}
-footer.mu.big .theme button[aria-pressed="true"]{background:var(--on-foot);color:var(--foot)}
+footer.mu.full .theme{background:transparent;box-shadow:inset 0 0 0 1px var(--foot-rule);margin-top:6px}
+footer.mu.full .theme span{color:var(--on-foot-muted)}
+footer.mu.full .theme button{color:var(--on-foot);min-height:28px;min-width:44px}
+footer.mu.full .theme button[aria-pressed="true"]{background:var(--on-foot);color:var(--foot)}
 @media (max-width:1099px){.sitefoot{grid-template-columns:1fr}}
 @media (max-width:640px){.fcols{grid-template-columns:1fr 1fr;gap:16px 20px}}
