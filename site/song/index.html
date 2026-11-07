@@ -31,7 +31,7 @@ D.shell("songs");
   const rank = songs.indexOf(s) + 1;
   const [perf, lives, albums] = await Promise.all([
     D.get(`/data/song/${slug}.json`),
-    D.get(`/data/lives/${slug}.json`).catch(() => null),
+    D.get("/data/lives/index.json").then((l) => (l.includes(slug) ? D.get(`/data/lives/${slug}.json`) : null)).catch(() => null),
     D.albums(),
   ]);
   const byS = Object.fromEntries(albums.map((a) => [a.s, a]));
