@@ -7,7 +7,7 @@
   --red:#b3261e; --red-ink:#a8231b; --on-red:#fff; --on-red-muted:rgba(255,255,255,.82);
   --tint:#f5f5f7; --us:#fbeceb; --black:#1d1d1f; --on-black:#fff; --muted-on-black:#a1a1a6;
   --bar:#d2d2d7; --bar-hot:#b3261e; --frost:rgba(245,245,247,.82);
-  --mast-charcoal:#343436; --foot:#000; --on-foot:#fff; --on-foot-muted:rgba(255,255,255,.72); --foot-rule:rgba(255,255,255,.14);
+  --mast-charcoal:#343436; --foot:var(--mast-charcoal); --on-foot:#fff; --on-foot-muted:rgba(255,255,255,.72); --foot-rule:rgba(255,255,255,.14);
   --radius:18px;
   --brand:Anton,"Arial Narrow","Helvetica Neue Condensed",Impact,sans-serif;
   --head:"SF Pro Display",system-ui,-apple-system,BlinkMacSystemFont,Inter,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
