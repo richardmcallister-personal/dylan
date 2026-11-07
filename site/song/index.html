@@ -69,7 +69,7 @@ D.shell("songs");
   }
 
   h += `<section class="sheet"><h2>Live, year by year</h2>${D.bars(s.y, Math.min(...years), Math.max(thisYear, ...years), (y, n) => n && n === peak[1])}
-    <p class="small muted" style="margin-top:8px">From setlists on record at setlist.fm. Some tours are not in the data yet, notably 1974 with the Band and most of 1986–87, so those years show as gaps.</p></section>`;
+    <p class="small muted" style="margin-top:8px">Performance counts from setlist.fm.</p></section>`;
 
   // Performances by year, newest first
   const byYear = {};

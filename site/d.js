@@ -1,7 +1,6 @@
 /* bobdylan.app — shared shell and helpers (layout from manutd.wiki). */
 (function () {
   const D = (window.D = {});
-  D.NAME = "Bob Dylan";
   const NAV = [
     ["home", "/", "Home", '<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>'],
     ["albums", "/albums/", "Albums", '<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1"/>'],
