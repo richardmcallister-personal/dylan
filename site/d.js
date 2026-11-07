@@ -1,9 +1,10 @@
-/* Dylan Notes — shared shell and helpers. */
+/* bobdylan.app — shared shell and helpers (layout from manutd.wiki). */
 (function () {
   const D = (window.D = {});
-  D.NAME = "Dylan Notes";
+  D.NAME = "Bob Dylan";
+  D.TAG = "Fan site";
   // The site's own mark: a harmonica, drawn from scratch (not any official Dylan emblem).
-  D.MARK = '<svg class="mark" viewBox="0 0 48 48" aria-hidden="true"><rect x="3" y="14" width="42" height="20" rx="5" fill="var(--accent)"/><rect x="3" y="14" width="42" height="7" rx="3.5" fill="var(--on-black)"/><g fill="var(--black)"><rect x="8" y="24" width="4" height="6" rx="1"/><rect x="15" y="24" width="4" height="6" rx="1"/><rect x="22" y="24" width="4" height="6" rx="1"/><rect x="29" y="24" width="4" height="6" rx="1"/><rect x="36" y="24" width="4" height="6" rx="1"/></g></svg>';
+  D.MARK = '<svg class="mark" viewBox="0 0 48 48" aria-hidden="true"><rect x="3" y="14" width="42" height="20" rx="5" fill="var(--black)"/><rect x="3" y="14" width="42" height="7" rx="3.5" fill="var(--on-red)"/><g fill="var(--red)"><rect x="8" y="24" width="4" height="6" rx="1"/><rect x="15" y="24" width="4" height="6" rx="1"/><rect x="22" y="24" width="4" height="6" rx="1"/><rect x="29" y="24" width="4" height="6" rx="1"/><rect x="36" y="24" width="4" height="6" rx="1"/></g></svg>';
 
   const NAV = [
     ["home", "/", "Home", '<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>'],
@@ -65,6 +66,19 @@
     w.innerHTML = `<iframe title="Spotify player" src="https://open.spotify.com/embed/${w.dataset.kind}/${w.dataset.id}?utm_source=generator" width="100%" height="${w.dataset.kind === "album" ? 352 : 152}" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
     w.classList.add("on");
   });
+  // Tour dates (from bobdylan.com via tools/build_tour.py) as gig rows with ticket buttons.
+  D.tour = async () => {
+    const t = await D.get("/data/tour.json").catch(() => ({ dates: [] }));
+    const today = D.today();
+    return t.dates.filter((x) => x.d >= today);
+  };
+  D.gig = (x) => {
+    const [y, m, d] = x.d.split("-").map(Number);
+    const wd = new Date(Date.UTC(y, m - 1, d)).toLocaleDateString("en-GB", { weekday: "short", timeZone: "UTC" });
+    return `<li><div class="d"><b>${d}</b>${MON[m - 1]} ${y}<small>${wd}</small></div>
+      <div class="o"><a href="${x.page}" target="_blank" rel="noopener">${D.esc(x.venue)}</a><small>${D.esc(x.city)}</small></div>
+      <div class="a">${x.tickets ? `<a class="btn pri sm" href="${x.tickets}" target="_blank" rel="noopener">Tickets</a>` : ""}${x.vip ? `<a class="btn sm" href="${x.vip}" target="_blank" rel="noopener">VIP</a>` : ""}${x.presale ? `<a class="btn sm" href="${x.presale}" target="_blank" rel="noopener">Pre-sale</a>` : ""}</div></li>`;
+  };
   D.qs = (k) => new URLSearchParams(location.search).get(k);
 
   // Theme: auto / light / dark, remembered per browser.
@@ -90,29 +104,62 @@
     document.body.insertAdjacentHTML(
       "afterbegin",
       `<a class="skip" href="#main">Skip to content</a>
-      <header class="mast"><div class="in">
-        <a class="brand" href="/" aria-label="${D.NAME} home">${D.MARK}<b><em>Dylan</em> Notes</b></a>
-        <nav class="nav" aria-label="Main">${nav}</nav>
-      </div></header>`
+      <div class="mast"><div class="wrap">
+        <header class="mu"><a class="brand" href="/" aria-label="${D.NAME} ${D.TAG.toLowerCase()}, home">${D.MARK}<span class="nm"><small>${D.TAG}</small><b>${D.NAME}</b></span></a></header>
+        <nav class="munav" aria-label="Main">${nav}<div class="musearch" role="search"><input type="search" id="q-site" placeholder="Search songs and albums" aria-label="Search songs and albums" autocomplete="off"><div class="hits" hidden></div></div></nav>
+      </div></div>`
     );
     document.body.insertAdjacentHTML(
       "beforeend",
       `<nav class="tabbar" aria-label="Main">${tabs}</nav>
-      <footer class="foot"><div class="in">
-        <div><b>${D.NAME}</b> is a fan site, not connected with Bob Dylan, his management or his record label. Official site: <a href="https://www.bobdylan.com/" rel="noopener">bobdylan.com</a>.</div>
-        <div>Concert and setlist data from <a href="https://www.setlist.fm/setlists/bob-dylan-23d6b8d3.html" rel="noopener">setlist.fm</a>, compiled by its users.
+      <footer class="mu wrap">
+        <div>This is a fan site, not connected with Bob Dylan, his management or his record label. Official site: <a href="https://www.bobdylan.com/" rel="noopener">bobdylan.com</a>.</div>
+        <div>Concert and setlist data from <a href="https://www.setlist.fm/setlists/bob-dylan-23d6b8d3.html" rel="noopener">setlist.fm</a>, compiled by its users. Tour dates and ticket links from bobdylan.com.
         Album artwork © the respective rights holders, shown small to identify each record, with links to its official page.</div>
-        <div class="theme" role="group" aria-label="Theme">Theme
-          <button type="button" data-t="auto">Auto</button><button type="button" data-t="light">Light</button><button type="button" data-t="dark">Dark</button>
-        </div>
-      </div></footer>`
+        <div class="theme" role="group" aria-label="Theme"><span>Theme</span><button type="button" data-t="auto">Auto</button><button type="button" data-t="light">Light</button><button type="button" data-t="dark">Dark</button></div>
+      </footer>`
     );
     const t = curTheme();
     document.querySelectorAll(".theme button").forEach((b) => {
       b.setAttribute("aria-pressed", b.dataset.t === t);
       b.addEventListener("click", () => D.setTheme(b.dataset.t));
     });
+    search();
   };
+
+  // Site search: songs and albums, built on first focus.
+  function search() {
+    const inp = document.getElementById("q-site"), box = inp.nextElementSibling;
+    let idx = null, sel = -1, items = [];
+    const norm = (s) => s.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase().replace(/[’']/g, "");
+    const load = async () => {
+      if (idx) return idx;
+      const [songs, albums] = await Promise.all([D.get("/data/songs.json"), D.albums()]);
+      idx = albums.map((a) => ({ k: "a", n: a.t, t: norm(a.t), h: "/albums/?a=" + a.s, sub: a.y + " · " + a.c.map((c) => D.CAT[c]).join(", "), a, w: 1000 }))
+        .concat(songs.map((s) => ({ k: "s", n: s.n, t: norm(s.n), h: "/song/?s=" + s.s, sub: s.k + " times live" + (s.c ? " · " + s.c + " cover" : ""), w: s.k })));
+      return idx;
+    };
+    const draw = () => {
+      if (!inp.value.trim()) { box.hidden = true; return; }
+      box.hidden = false;
+      box.innerHTML = items.length
+        ? items.map((x, i) => `<a href="${x.h}"${i === sel ? ' class="sel"' : ""}>${x.k === "a" ? D.cover(x.a, 44, 'alt=""') : '<span class="ic">Song</span>'}<span><b>${D.esc(x.n)}</b><small>${D.esc(x.sub)}</small></span></a>`).join("")
+        : `<div class="none">Nothing matches “${D.esc(inp.value)}”.</div>`;
+    };
+    inp.addEventListener("focus", load);
+    inp.addEventListener("input", async () => {
+      const q = norm(inp.value.trim());
+      const all = await load();
+      items = q ? all.filter((x) => x.t.includes(q)).sort((a, b) => (b.t.startsWith(q) - a.t.startsWith(q)) || b.w - a.w).slice(0, 8) : [];
+      sel = -1; draw();
+    });
+    inp.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); sel = Math.max(-1, Math.min(items.length - 1, sel + (e.key === "ArrowDown" ? 1 : -1))); draw(); }
+      else if (e.key === "Enter" && items.length) { location.href = items[Math.max(0, sel)].h; }
+      else if (e.key === "Escape") { inp.value = ""; box.hidden = true; inp.blur(); }
+    });
+    document.addEventListener("click", (e) => { if (!e.target.closest(".musearch")) box.hidden = true; });
+  }
 
   // Year bar chart: {yyyy: n} → bars from first..last year (or given range).
   D.bars = (byYear, from, to, hot) => {

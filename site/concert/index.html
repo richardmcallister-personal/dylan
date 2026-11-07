@@ -3,19 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Setlist · Dylan Notes</title>
+<title>Setlist · Bob Dylan fan site</title>
 <meta name="description" content="A Bob Dylan setlist, song by song.">
-<link rel="preload" href="/fonts/fraunces-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/anton-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/d.css">
 <link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/assets/icon-180.png">
 <link rel="manifest" href="/manifest.webmanifest">
-<meta name="theme-color" content="#1a1814">
+<meta name="theme-color" content="#b3261e">
 <script>try{var t=localStorage.getItem("dn_theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
 <script src="/d.js"></script>
 </head>
 <body>
-<main id="main"><div class="loading">Loading…</div></main>
+<main id="main" class="wrap"><div class="loading">Loading…</div></main>
 <script>
 D.shell("concerts");
 (async () => {
@@ -27,7 +27,7 @@ D.shell("concerts");
     M.innerHTML = `<div class="head"><h1>Show not found</h1><p><a href="/concerts/">Browse all shows</a>.</p></div>`;
     return;
   }
-  document.title = `${s.v}, ${D.date(s.d)} · Dylan Notes`;
+  document.title = `${s.v}, ${D.date(s.d)} · Bob Dylan fan site`;
   const songs = await D.get("/data/songs.json");
   const known = Object.fromEntries(songs.map((x) => [x.s, x]));
   const total = s.sets.reduce((t, x) => t + x.s.length, 0);
@@ -50,6 +50,10 @@ D.shell("concerts");
       <p class="small muted" style="margin-top:12px">Setlist from <a href="${s.u}" rel="noopener">setlist.fm</a>, where fans can correct and add details.</p>
     </section>
     <a class="more" href="/concerts/?y=${s.d.slice(0, 4)}">All ${s.d.slice(0, 4)} shows</a>`;
+  if (s.d >= D.today()) {
+    const t = (await D.tour()).find((x) => x.d === s.d);
+    if (t) M.querySelector(".head").insertAdjacentHTML("beforeend", `<div class="btns">${t.tickets ? `<a class="btn pri" href="${t.tickets}" target="_blank" rel="noopener">Tickets</a>` : ""}${t.vip ? `<a class="btn" href="${t.vip}" target="_blank" rel="noopener">VIP</a>` : ""}<a class="btn" href="${t.page}" target="_blank" rel="noopener">Official date page</a></div>`);
+  }
 })();
 </script>
 </body>

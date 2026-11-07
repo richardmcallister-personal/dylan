@@ -3,19 +3,19 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Dylan Notes · an unofficial Bob Dylan fan site</title>
-<meta name="description" content="Every Bob Dylan show since 1960, every song he has played live, all 82 albums and listening journeys. An unofficial fan site.">
-<link rel="preload" href="/fonts/fraunces-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<title>Bob Dylan fan site: albums, songs, shows and tickets</title>
+<meta name="description" content="Every Bob Dylan show since 1960, every song he has played live, all 82 albums and listening journeys. A fan site.">
+<link rel="preload" href="/fonts/anton-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/d.css">
 <link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="/assets/icon-180.png">
 <link rel="manifest" href="/manifest.webmanifest">
-<meta name="theme-color" content="#1a1814">
+<meta name="theme-color" content="#b3261e">
 <script>try{var t=localStorage.getItem("dn_theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
 <script src="/d.js"></script>
 </head>
 <body>
-<main id="main">
+<main id="main" class="wrap">
   <section class="hero">
     <h1>The records, the songs, the shows.</h1>
     <p>More than 4000 Bob Dylan concerts on record, every song played at them, and all 82 albums from the official catalogue, with ways in for newcomers and long-time listeners.</p>
@@ -23,41 +23,39 @@
     <div class="strip" id="strip" aria-hidden="true"></div>
   </section>
 
-  <div class="grid3">
-    <div>
+  <div class="hub">
+    <div class="col">
+      <section class="sheet" id="next">
+        <h2 class="row"><span>On tour</span><a class="tlink" href="/concerts/#tour">All dates</a></h2>
+        <ul class="gigs"><li class="loading">Loading…</li></ul>
+      </section>
       <section class="sheet" id="latest" style="min-height:220px">
         <h2><a href="/concerts/">Latest show</a></h2>
         <div class="loading">Loading…</div>
       </section>
-      <section class="sheet" id="next" hidden>
-        <h2>Coming up</h2>
-        <ul class="rows"></ul>
-        <p class="small muted" style="margin-top:8px">Dates as listed on setlist.fm. Check <a href="https://www.bobdylan.com/tour/" rel="noopener">bobdylan.com</a> before you travel.</p>
-      </section>
     </div>
-    <div>
+    <div class="col">
       <section class="sheet">
         <span class="tag">One song, many lives</span>
-        <h2 style="margin-top:10px"><a href="/song/?s=like-a-rolling-stone">Like a Rolling Stone</a></h2>
+        <h2 style="margin-top:10px;font-size:24px"><a href="/song/?s=like-a-rolling-stone">Like a Rolling Stone</a></h2>
         <p>From waltz-time rehearsals in June 1965 to the Free Trade Hall in 1966, the Isle of Wight, MTV Unplugged and more than 2000 nights on stage.</p>
-        <a class="more" href="/song/?s=like-a-rolling-stone">Follow the song</a>
+        <a class="btn pri" href="/song/?s=like-a-rolling-stone">Follow the song</a>
       </section>
       <section class="sheet" id="otd">
         <h2>On this day</h2>
         <ul class="rows"></ul>
       </section>
     </div>
-    <div>
+    <div class="col">
       <section class="sheet" id="top">
-        <h2><a href="/songs/">Most played live</a></h2>
+        <h2 class="row"><span>Most played live</span><a class="tlink" href="/songs/">All songs</a></h2>
         <ul class="rows"></ul>
-        <a class="more" href="/songs/">All 800 songs</a>
       </section>
     </div>
   </div>
 
-  <section style="margin-top:8px">
-    <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap"><h2>Listening journeys</h2><a class="more" href="/journeys/" style="margin:0">All journeys</a></div>
+  <section style="margin-top:24px">
+    <h2 class="row"><span style="font-size:24px">Listening journeys</span><a class="tlink" href="/journeys/">All journeys</a></h2>
     <div class="jcards" id="journeys"></div>
   </section>
 </main>
@@ -97,26 +95,21 @@ D.shell("home");
   try { shows = (await D.get("/api/latest")).shows; } catch (e) {}
   const today = D.today();
   const done = shows.filter((s) => s.sets.some((x) => x.s.length));
-  const up = shows.filter((s) => s.d >= today && !s.sets.some((x) => x.s.length)).sort((a, b) => (a.d < b.d ? -1 : 1));
   const L = document.getElementById("latest");
   const last = done[0];
   if (last) {
     const songsIn = last.sets.flatMap((x) => x.s);
     L.innerHTML = `<h2><a href="/concerts/">Latest show</a></h2>
-      <div class="big">${D.esc(last.v)}</div>
+      <div class="big t">${D.esc(last.v)}</div>
       <div class="muted">${D.esc(D.place(last))} · ${D.date(last.d, true)}</div>
       <ol class="small" style="margin:12px 0 0;padding-left:22px">${songsIn.slice(0, 7).map((x) => `<li><a href="/song/?s=${D.slug(x.n)}">${D.esc(x.n)}</a></li>`).join("")}</ol>
       <a class="more" href="/concert/?id=${last.id}">Full setlist (${songsIn.length} songs)</a>`;
   } else if (idx.last) {
-    L.innerHTML = `<h2>Latest show</h2><div class="big">${D.esc(idx.last.v)}</div><div class="muted">${D.esc(idx.last.c)} · ${D.date(idx.last.d, true)}</div><a class="more" href="/concert/?id=${idx.last.id}">Setlist</a>`;
+    L.innerHTML = `<h2>Latest show</h2><div class="big t">${D.esc(idx.last.v)}</div><div class="muted">${D.esc(idx.last.c)} · ${D.date(idx.last.d, true)}</div><a class="more" href="/concert/?id=${idx.last.id}">Setlist</a>`;
   }
-  const upcoming = up.length ? up : (idx.upcoming || []);
-  if (upcoming.length) {
-    const N = document.getElementById("next");
-    N.hidden = false;
-    N.querySelector(".rows").innerHTML = upcoming.slice(0, 6).map((s) =>
-      `<li><div class="r"><b>${D.esc(s.v)}</b><span class="muted small">${D.esc(D.place(s))}</span><span class="end small num">${D.date(s.d)}</span></div></li>`).join("");
-  }
+  const tour = await D.tour();
+  const N = document.querySelector("#next .gigs");
+  N.innerHTML = tour.length ? tour.slice(0, 5).map(D.gig).join("") : `<li class="empty">No dates announced. Check <a href="https://www.bobdylan.com/on-tour/" rel="noopener">bobdylan.com</a>.</li>`;
 })();
 </script>
 </body>
