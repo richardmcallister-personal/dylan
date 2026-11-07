@@ -73,3 +73,7 @@ Tokens: `--bg --paper --ink --muted --rule --red --red-ink --on-red --on-red-mut
 --muted-on-black --bar --bar-hot --frost --radius --brand --head --body`. Shared components in d.css: `.sheet
 .hero .hub .chips .wall .cv .rows .gigs .tiles .bars .lives .jcards .stops .set .years .player`. The shell
 (masthead, search, tab bar, footer, theme switch) is injected by `D.shell(page)`; pages use `<main class="wrap">`.
+
+Footer (7 Nov): manutd.wiki's dark full-width band — `siteFooter()` in d.js (brand + Listen / Live / Archive /
+Official columns, no other-sites column), then `.fnotes` with the fan-site line, sources and the theme switch. Class is
+`footer.mu.full` (not `.big`, which is the large-figure style). Keep the fan-site line.
