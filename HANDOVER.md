@@ -5,7 +5,7 @@ file only says where things stand.
 
 ## State of the site (v1, live on bobdylan.app)
 
-- 7 Nov afternoon: manutd.wiki layout; Bob Dylan wordmark in the masthead; Center logo and exterior photo on the homepage; harmonica app icons; site search; tour dates with Tickets / VIP / pre-sale links from
+- 7 Nov afternoon: manutd.wiki layout; Bob Dylan wordmark in the masthead; Center logo and exterior photo on the homepage; black eye emblem in the masthead, favicon and app icons; site search; tour dates with Tickets / VIP / pre-sale links from
   bobdylan.com (`tools/build_tour.py`, 19 dates at build) on home, Shows and upcoming setlist pages; Spotify
   players: albums now (tap-to-load, in the album dialog, deep link `/albums/?a=<slug>`), songs once Spotify keys are
   added as Worker secrets.

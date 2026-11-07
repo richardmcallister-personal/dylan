@@ -100,7 +100,7 @@
       "afterbegin",
       `<a class="skip" href="#main">Skip to content</a>
       <div class="mast"><div class="wrap">
-        <header class="mu"><a class="brand" href="/" aria-label="Bob Dylan home"><img src="/assets/bob-dylan.png" width="604" height="79" alt="Bob Dylan"></a></header>
+        <header class="mu"><a class="brand" href="/" aria-label="Bob Dylan home"><img class="emblem" src="/assets/dylan-eye.png" width="344" height="344" alt=""><img class="wordmark" src="/assets/bob-dylan.png" width="604" height="79" alt="Bob Dylan"></a></header>
         <nav class="munav" aria-label="Main">${nav}<div class="musearch" role="search"><input type="search" id="q-site" placeholder="Search songs and albums" aria-label="Search songs and albums" autocomplete="off"><div class="hits" hidden></div></div></nav>
       </div></div>`
     );
