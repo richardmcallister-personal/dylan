@@ -7,6 +7,7 @@
 <meta name="description" content="Explore the concerts, album releases and milestones in Dylan’s life, from Hibbing to the Nobel Prize.">
 <link rel="preload" href="/fonts/anton-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/d.css">
+<link rel="stylesheet" href="/timeline/timeline.css">
 <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
 <link rel="apple-touch-icon" href="/assets/dylan-eye-180.png">
 <link rel="manifest" href="/manifest.webmanifest">
@@ -16,6 +17,11 @@
 </head>
 <body>
 <main id="main" class="wrap"><div class="head"><h1>Timeline</h1><p>Explore the concerts, album releases and milestones in Dylan’s life, from Hibbing to the Nobel Prize.</p></div>
+<section id="chronology" aria-label="Visual timeline">
+<nav id="decades" aria-label="Choose a decade"></nav>
+<div id="rail"></div>
+</section>
+<h2 id="archive-heading" tabindex="-1">Year-by-year archive</h2>
 <div class="archive-controls"><label>Year<select id="year"><option value="">All years</option></select></label><label>Show<select id="kind"><option value="">All events</option><option>Milestones</option><option>Awards</option><option>Albums</option><option>Concerts</option></select></label></div><p class="small muted" id="count" aria-live="polite"></p><div id="years-list"></div>
 <p id="status" role="status">Loading…</p></main>
 <script>D.shell("timeline");</script>

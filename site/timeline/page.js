@@ -12,6 +12,52 @@
       kind === "Milestones" ? milestones : [...milestones,...releases];
     return rows.filter(e => e.date.startsWith(year));
   }
+  const rail = document.querySelector("#rail");
+  const decades = document.querySelector("#decades");
+  const decadeOf = year => Math.floor(Number(year) / 10) * 10;
+  let decade = decadeOf(years.includes(D.qs("y")) ? D.qs("y") : "1960");
+  const covers = new Map(albums.map(a => ["/albums/?a="+encodeURIComponent(a.s), a.s]));
+  for (const d of [...new Set(years.map(decadeOf))]) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = d+"s";
+    button.dataset.decade = String(d);
+    decades.append(button);
+  }
+  function drawRail() {
+    const kind = kindSelect.value;
+    for(const button of decades.children) button.setAttribute("aria-pressed", Number(button.dataset.decade) === decade);
+    const blocks = years.filter(y => decadeOf(y) === decade).map(year => {
+      const items = events(year,kind).sort((a,b)=>a.date.localeCompare(b.date));
+      const shows = (!kind || kind === "Concerts") ? index.years[year] || 0 : 0;
+      if(!items.length && !shows) return "";
+      const cards = items.map(e => {
+        const slug = covers.get(e.link);
+        const art = slug ? '<img src="/covers/'+D.esc(slug)+'.webp" loading="lazy" width="54" height="54" alt="">' : "";
+        return '<a class="rail-card" href="'+D.esc(e.link || e.source)+'">'+art+'<span><small>'+
+          D.esc(e.kind)+(e.date.length>4?' · '+readable(e.date):'')+'</small><strong>'+D.esc(e.title)+'</strong></span></a>';
+      }).join("");
+      const concerts = shows ? '<button type="button" class="rail-shows" data-year="'+year+'">'+shows+' '+(shows===1?'concert':'concerts')+' →</button>' : "";
+      return '<div class="rail-year"><div class="rail-date"><button type="button" data-year="'+year+'" aria-label="Open events for '+year+'">'+year+'</button></div><div class="rail-entries">'+cards+concerts+'</div></div>';
+    }).join("");
+    rail.innerHTML = blocks || '<p class="muted">No matching events in the '+decade+'s.</p>';
+  }
+  decades.addEventListener("click",event=>{
+    const button = event.target.closest("button[data-decade]");
+    if(!button) return;
+    decade = Number(button.dataset.decade);
+    yearSelect.value = "";
+    render();
+  });
+  rail.addEventListener("click",event=>{
+    const button = event.target.closest("button[data-year]");
+    if(!button) return;
+    yearSelect.value = button.dataset.year;
+    if(button.classList.contains("rail-shows")) kindSelect.value = "Concerts";
+    render();
+    document.querySelector("#archive-heading").focus();
+    document.querySelector("#archive-heading").scrollIntoView({block:"start"});
+  });
   function readable(date) {
     if(date.length === 4) return date;
     const full = date.length === 7;
@@ -24,6 +70,8 @@
   }
   function render() {
     const kind=kindSelect.value, showConcerts=!kind || kind==="Concerts";
+    if(yearSelect.value) decade=decadeOf(yearSelect.value);
+    drawRail();
     let total=0;
     list.replaceChildren();
     for(const year of years.filter(y=>!yearSelect.value || yearSelect.value===y)){
