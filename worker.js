@@ -129,6 +129,10 @@ async function api(url, env) {
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
+    if (url.hostname === "www.bobdylan.app") {
+      url.hostname = "bobdylan.app";
+      return Response.redirect(url.toString(), 301);
+    }
     if (request.method !== "GET" && request.method !== "HEAD") return new Response("Method not allowed", { status: 405 });
     if (url.pathname === "/health") return health(env);
     if (url.pathname.startsWith("/api/")) return api(url, env);

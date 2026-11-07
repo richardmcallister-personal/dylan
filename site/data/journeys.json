@@ -1,0 +1,79 @@
+[
+  {
+    "id": "storyteller",
+    "title": "The acoustic storyteller",
+    "years": "1962–1964",
+    "intro": "Just a voice, a guitar and a harmonica. Start here to hear how fast he went from singing other people's songs to writing ones everybody else would sing.",
+    "stops": [
+      {"a": "bob-dylan", "why": "The debut is mostly traditional songs and blues. Only two originals made it on, one of them a tribute to Woody Guthrie.", "try": ["Song to Woody", "The House of the Rising Sun"]},
+      {"a": "freewheelin-bob-dylan", "why": "A year later, almost all his own songs, and several that went round the world.", "try": ["Blowin' in the Wind", "A Hard Rain's A-Gonna Fall", "Don't Think Twice, It's All Right"]},
+      {"a": "the-times-they-are-a-changin", "why": "His most openly topical record: news stories and protest set to plain, hard folk arrangements.", "try": ["The Times They Are A-Changin'", "With God on Our Side"]},
+      {"a": "another-side-of-bob-dylan", "why": "Recorded in a single night in June 1964, and already turning away from protest towards more personal songs.", "try": ["It Ain't Me, Babe", "My Back Pages", "Chimes of Freedom"]},
+      {"a": "bootleg-series-vol-9-witmark-demos-1962-1964", "why": "Publishing demos cut for his music publisher: rough first drafts of many of these songs, and some he never recorded properly.", "try": ["Mr. Tambourine Man"]}
+    ]
+  },
+  {
+    "id": "electric",
+    "title": "Going electric",
+    "years": "1965–1966",
+    "intro": "Eighteen months that changed what a rock record could say. Bands, organ, long songs, and audiences who did not all approve.",
+    "stops": [
+      {"a": "bringing-it-all-back-home", "why": "Electric on one side, acoustic on the other: the turn happens inside a single album.", "try": ["Subterranean Homesick Blues", "Mr. Tambourine Man", "It's Alright, Ma (I'm Only Bleeding)"]},
+      {"a": "highway-61-revisited", "why": "Opens with Like a Rolling Stone and ends with the eleven-minute, acoustic Desolation Row.", "try": ["Like a Rolling Stone", "Highway 61 Revisited", "Ballad of a Thin Man"]},
+      {"a": "blonde-on-blonde", "why": "A double album made mostly in Nashville, looser and stranger than anything before it.", "try": ["Visions of Johanna", "Just Like a Woman", "Rainy Day Women #12 & 35"]},
+      {"a": "bootleg-series-vol-4-bob-dylan-live-1966", "why": "Manchester, 17 May 1966. A quiet acoustic first half, then the Hawks, the heckles and a furious Like a Rolling Stone.", "try": ["Ballad of a Thin Man", "Like a Rolling Stone"]},
+      {"a": "the-bootleg-series-vol-12-the-best-of-the-cutting-edge-1965-1966", "why": "The studio sessions behind all of this: false starts, rehearsals and songs finding their shape.", "try": ["Like a Rolling Stone", "Visions of Johanna"]}
+    ]
+  },
+  {
+    "id": "country",
+    "title": "Basement, barn and Nashville",
+    "years": "1967–1970",
+    "intro": "After the noise of 1966, a sudden step back: home recordings with the Band, spare country records and a new, smoother voice.",
+    "stops": [
+      {"a": "basement-tapes", "why": "Recorded with the Band in upstate New York in 1967, passed around for years, and only released officially in 1975.", "try": ["I Shall Be Released", "You Ain't Goin' Nowhere", "Tears of Rage"]},
+      {"a": "john-wesley-harding", "why": "Short, sparse songs made with a tiny Nashville band, at the height of psychedelia.", "try": ["All Along the Watchtower", "I'll Be Your Baby Tonight"]},
+      {"a": "nashville-skyline", "why": "Full country, a crooning voice, and a duet with Johnny Cash.", "try": ["Lay Lady Lay", "Girl from the North Country", "I Threw It All Away"]},
+      {"a": "the-bootleg-series-vol-15-travelin-thru-1967-1969", "why": "Outtakes from those Nashville years, including the sessions with Johnny Cash.", "try": ["I Still Miss Someone"]},
+      {"a": "self-portrait", "why": "A puzzling double album of covers, live tracks and instrumentals. Easier to love next to its companion, Another Self Portrait.", "try": ["Copper Kettle", "Like a Rolling Stone"]}
+    ]
+  },
+  {
+    "id": "tracks",
+    "title": "Blood, tracks and thunder",
+    "years": "1974–1976",
+    "intro": "A great songwriter at full strength again: one of his most loved albums, the sessions behind it, and the travelling circus that followed.",
+    "stops": [
+      {"a": "blood-tracks", "why": "Recorded in New York in September 1974; he re-cut five songs in Minneapolis that December before release.", "try": ["Tangled Up in Blue", "Simple Twist of Fate", "Shelter from the Storm"]},
+      {"a": "more-blood-more-tracks-the-bootleg-series-vol-14", "why": "The New York sessions as they first sounded: quieter, closer, often just voice and guitar.", "try": ["Tangled Up in Blue", "Idiot Wind"]},
+      {"a": "desire", "why": "Long story songs, Scarlet Rivera's violin and Emmylou Harris's harmonies.", "try": ["Hurricane", "One More Cup of Coffee (Valley Below)", "Isis"]},
+      {"a": "bob-dylan-the-rolling-thunder-revue-the-1975-live-recordings", "why": "The Rolling Thunder Revue of autumn 1975: small halls, white face paint, a big band of friends.", "try": ["Isis", "Hurricane", "Tangled Up in Blue"]},
+      {"a": "hard-rain", "why": "The second leg in 1976, rougher and angrier, released straight after the tour.", "try": ["Idiot Wind", "Shelter from the Storm"]}
+    ]
+  },
+  {
+    "id": "gospel",
+    "title": "The gospel years",
+    "years": "1979–1981",
+    "intro": "Three records and a run of tours about faith, with some of the hardest-working bands he ever led. Divisive at the time, and much reassessed since.",
+    "stops": [
+      {"a": "slow-train-coming", "why": "Made at Muscle Shoals with Mark Knopfler on guitar. Gotta Serve Somebody won him a Grammy.", "try": ["Gotta Serve Somebody", "I Believe in You", "Slow Train"]},
+      {"a": "saved", "why": "Fully gospel, with a choir of backing singers driving the songs.", "try": ["Pressing On", "Solid Rock", "In the Garden"]},
+      {"a": "shot-love", "why": "Faith alongside other subjects again, and one of his finest late songs to close.", "try": ["Every Grain of Sand", "Shot of Love"]},
+      {"a": "trouble-no-more-the-bootleg-series-vol-13-1979-1981", "why": "The live shows, where these songs sounded best.", "try": ["Slow Train", "When He Returns"]}
+    ]
+  },
+  {
+    "id": "late",
+    "title": "The late masterpieces",
+    "years": "1997–2020",
+    "intro": "Blues, old popular song and long, dark ballads, made by a man in his late fifties to late seventies who sounded more at ease than ever.",
+    "stops": [
+      {"a": "time-out-of-mind", "why": "Produced by Daniel Lanois, swampy and haunted. It won the Grammy for Album of the Year.", "try": ["Not Dark Yet", "Love Sick", "Make You Feel My Love"]},
+      {"a": "love-and-theft", "why": "Released on 11 September 2001: blues, swing and rockabilly with a grin.", "try": ["Mississippi", "High Water (For Charley Patton)", "Summer Days"]},
+      {"a": "modern-times", "why": "His first US number one album since Desire, thirty years earlier.", "try": ["Thunder on the Mountain", "Workingman's Blues #2", "Nettie Moore"]},
+      {"a": "tempest", "why": "Murder ballads and long tales, including a fourteen-minute song about the Titanic.", "try": ["Duquesne Whistle", "Pay in Blood", "Long and Wasted Years"]},
+      {"a": "rough-and-rowdy-ways", "why": "Released at 79. It closes with Murder Most Foul, a song of nearly seventeen minutes.", "try": ["I Contain Multitudes", "Key West (Philosopher Pirate)", "False Prophet"]}
+    ]
+  }
+]

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Setlist · Dylan Notes</title>
+<meta name="description" content="A Bob Dylan setlist, song by song.">
+<link rel="preload" href="/fonts/fraunces-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/d.css">
+<link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/icon-180.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#1a1814">
+<script>try{var t=localStorage.getItem("dn_theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<script src="/d.js"></script>
+</head>
+<body>
+<main id="main"><div class="loading">Loading…</div></main>
+<script>
+D.shell("concerts");
+(async () => {
+  const M = document.getElementById("main");
+  const id = (D.qs("id") || "").replace(/[^a-z0-9]/gi, "");
+  let s;
+  try { s = await D.get(`/api/setlist?id=${id}`); } catch (e) {}
+  if (!s || !s.id) {
+    M.innerHTML = `<div class="head"><h1>Show not found</h1><p><a href="/concerts/">Browse all shows</a>.</p></div>`;
+    return;
+  }
+  document.title = `${s.v}, ${D.date(s.d)} · Dylan Notes`;
+  const songs = await D.get("/data/songs.json");
+  const known = Object.fromEntries(songs.map((x) => [x.s, x]));
+  const total = s.sets.reduce((t, x) => t + x.s.length, 0);
+  let n = 0;
+  const sets = s.sets.filter((x) => x.s.length).map((set, i) => {
+    const label = set.e ? (set.e > 1 ? `Encore ${set.e}` : "Encore") : set.n || (s.sets.length > 1 ? `Set ${i + 1}` : "");
+    const start = n; n += set.s.length;
+    return `<div class="set">${label ? `<h3>${D.esc(label)}</h3>` : ""}<ol start="${start + 1}">` + set.s.map((x) => {
+      const k = known[D.slug(x.n)];
+      const extra = [x.c ? `${D.esc(x.c)} cover` : "", x.w ? `with ${D.esc(x.w)}` : "", x.i ? D.esc(x.i) : "", k && k.f[1] === s.id ? "<b>first performance</b>" : ""].filter(Boolean).join(" · ");
+      return `<li>${k ? `<a href="/song/?s=${k.s}">${D.esc(x.n)}</a>` : D.esc(x.n)}${extra ? ` <span class="muted">(${extra})</span>` : ""}</li>`;
+    }).join("") + `</ol></div>`;
+  }).join("");
+  M.innerHTML = `<div class="head"><span class="tag">${D.date(s.d, true)}</span>
+      <h1 style="margin-top:8px">${D.esc(s.v)}</h1>
+      <p>${D.esc(D.place(s))}${s.t ? " · " + D.esc(s.t) : ""}</p></div>
+    <section class="sheet">
+      <h2>Setlist <span class="muted small" style="font-family:var(--body);font-weight:400">${total ? total + " songs" : ""}</span></h2>
+      ${sets || `<p class="empty">No setlist on record for this show${s.d >= D.today() ? " yet" : ""}.</p>`}
+      <p class="small muted" style="margin-top:12px">Setlist from <a href="${s.u}" rel="noopener">setlist.fm</a>, where fans can correct and add details.</p>
+    </section>
+    <a class="more" href="/concerts/?y=${s.d.slice(0, 4)}">All ${s.d.slice(0, 4)} shows</a>`;
+})();
+</script>
+</body>
+</html>

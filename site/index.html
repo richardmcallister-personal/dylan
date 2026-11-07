@@ -1,1 +1,123 @@
-<!doctype html><meta charset="utf-8"><title>Dylan</title><p>Building…</p>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Dylan Notes · an unofficial Bob Dylan fan site</title>
+<meta name="description" content="Every Bob Dylan show since 1960, every song he has played live, all 82 albums and listening journeys. An unofficial fan site.">
+<link rel="preload" href="/fonts/fraunces-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/d.css">
+<link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/icon-180.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#1a1814">
+<script>try{var t=localStorage.getItem("dn_theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<script src="/d.js"></script>
+</head>
+<body>
+<main id="main">
+  <section class="hero">
+    <h1>The records, the songs, the shows.</h1>
+    <p>More than 4000 Bob Dylan concerts on record, every song played at them, and all 82 albums from the official catalogue, with ways in for newcomers and long-time listeners.</p>
+    <div class="stats" id="stats"><div><b>4164</b><span>shows</span></div><div><b>800</b><span>songs played live</span></div><div><b>82</b><span>albums</span></div><div><b>52</b><span>countries</span></div></div>
+    <div class="strip" id="strip" aria-hidden="true"></div>
+  </section>
+
+  <div class="grid3">
+    <div>
+      <section class="sheet" id="latest" style="min-height:220px">
+        <h2><a href="/concerts/">Latest show</a></h2>
+        <div class="loading">Loading…</div>
+      </section>
+      <section class="sheet" id="next" hidden>
+        <h2>Coming up</h2>
+        <ul class="rows"></ul>
+        <p class="small muted" style="margin-top:8px">Dates as listed on setlist.fm. Check <a href="https://www.bobdylan.com/tour/" rel="noopener">bobdylan.com</a> before you travel.</p>
+      </section>
+    </div>
+    <div>
+      <section class="sheet">
+        <span class="tag">One song, many lives</span>
+        <h2 style="margin-top:10px"><a href="/song/?s=like-a-rolling-stone">Like a Rolling Stone</a></h2>
+        <p>From waltz-time rehearsals in June 1965 to the Free Trade Hall in 1966, the Isle of Wight, MTV Unplugged and more than 2000 nights on stage.</p>
+        <a class="more" href="/song/?s=like-a-rolling-stone">Follow the song</a>
+      </section>
+      <section class="sheet" id="otd">
+        <h2>On this day</h2>
+        <ul class="rows"></ul>
+      </section>
+    </div>
+    <div>
+      <section class="sheet" id="top">
+        <h2><a href="/songs/">Most played live</a></h2>
+        <ul class="rows"></ul>
+        <a class="more" href="/songs/">All 800 songs</a>
+      </section>
+    </div>
+  </div>
+
+  <section style="margin-top:8px">
+    <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap"><h2>Listening journeys</h2><a class="more" href="/journeys/" style="margin:0">All journeys</a></div>
+    <div class="jcards" id="journeys"></div>
+  </section>
+</main>
+<script>
+D.shell("home");
+(async () => {
+  const [albums, idx, songs, otd, journeys] = await Promise.all([
+    D.albums(), D.get("/data/index.json"), D.get("/data/songs.json"), D.get("/data/otd.json"), D.get("/data/journeys.json"),
+  ]);
+  const byS = Object.fromEntries(albums.map((a) => [a.s, a]));
+
+  document.getElementById("stats").innerHTML =
+    `<div><b class="num">${idx.total}</b><span>shows since ${Object.keys(idx.years)[0]}</span></div>` +
+    `<div><b class="num">${idx.songs}</b><span>songs played live</span></div>` +
+    `<div><b class="num">${albums.length}</b><span>albums</span></div>` +
+    `<div><b class="num">${idx.countries}</b><span>countries</span></div>`;
+  document.getElementById("strip").innerHTML = albums.filter((a) => a.c.includes("studio")).map((a) => D.cover(a, 78, 'alt=""')).join("");
+
+  // Most played
+  document.querySelector("#top .rows").innerHTML = songs.slice(0, 10).map((s, i) =>
+    `<li><a class="r" href="/song/?s=${s.s}"><b>${i + 1}. ${D.esc(s.n)}</b><span class="muted small">${s.f[0].slice(0, 4)}–${s.l[0].slice(0, 4)}</span><span class="end num big">${s.k}</span></a></li>`).join("");
+
+  // On this day
+  const md = D.today().slice(5);
+  const list = (otd[md] || []).slice().sort((a, b) => b[0] - a[0]);
+  document.querySelector("#otd .rows").innerHTML = list.length
+    ? list.slice(0, 6).map(([y, id, v, c, cc]) => `<li><a class="r" href="/concert/?id=${id}"><b>${D.esc(v)}</b><span class="muted small">${D.esc(c)}, ${cc}</span><span class="end num">${y}</span></a></li>`).join("") +
+      (list.length > 6 ? `<li class="small muted" style="padding-top:8px">and ${list.length - 6} more on this date</li>` : "")
+    : `<li class="empty">No shows on record for ${D.date("2000-" + md).replace(" 2000", "")}.</li>`;
+
+  // Journeys
+  document.getElementById("journeys").innerHTML = journeys.map((j) =>
+    `<a class="jcard" href="/journeys/#${j.id}"><div class="mosaic">${j.stops.slice(0, 4).map((s) => byS[s.a] ? D.cover(byS[s.a], 80, 'alt=""') : "").join("")}</div><div class="t"><b>${D.esc(j.title)}</b><span>${D.esc(j.years)} · ${j.stops.length} stops</span></div></a>`).join("");
+
+  // Latest + upcoming, live from setlist.fm (falls back to the built data)
+  let shows = [];
+  try { shows = (await D.get("/api/latest")).shows; } catch (e) {}
+  const today = D.today();
+  const done = shows.filter((s) => s.sets.some((x) => x.s.length));
+  const up = shows.filter((s) => s.d >= today && !s.sets.some((x) => x.s.length)).sort((a, b) => (a.d < b.d ? -1 : 1));
+  const L = document.getElementById("latest");
+  const last = done[0];
+  if (last) {
+    const songsIn = last.sets.flatMap((x) => x.s);
+    L.innerHTML = `<h2><a href="/concerts/">Latest show</a></h2>
+      <div class="big">${D.esc(last.v)}</div>
+      <div class="muted">${D.esc(D.place(last))} · ${D.date(last.d, true)}</div>
+      <ol class="small" style="margin:12px 0 0;padding-left:22px">${songsIn.slice(0, 7).map((x) => `<li><a href="/song/?s=${D.slug(x.n)}">${D.esc(x.n)}</a></li>`).join("")}</ol>
+      <a class="more" href="/concert/?id=${last.id}">Full setlist (${songsIn.length} songs)</a>`;
+  } else if (idx.last) {
+    L.innerHTML = `<h2>Latest show</h2><div class="big">${D.esc(idx.last.v)}</div><div class="muted">${D.esc(idx.last.c)} · ${D.date(idx.last.d, true)}</div><a class="more" href="/concert/?id=${idx.last.id}">Setlist</a>`;
+  }
+  const upcoming = up.length ? up : (idx.upcoming || []);
+  if (upcoming.length) {
+    const N = document.getElementById("next");
+    N.hidden = false;
+    N.querySelector(".rows").innerHTML = upcoming.slice(0, 6).map((s) =>
+      `<li><div class="r"><b>${D.esc(s.v)}</b><span class="muted small">${D.esc(D.place(s))}</span><span class="end small num">${D.date(s.d)}</span></div></li>`).join("");
+  }
+})();
+</script>
+</body>
+</html>

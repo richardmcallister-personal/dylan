@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Albums · Dylan Notes</title>
+<meta name="description" content="All 82 Bob Dylan albums from the official catalogue, in order: studio, live, compilations and the Bootleg Series.">
+<link rel="preload" href="/fonts/fraunces-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/d.css">
+<link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/icon-180.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#1a1814">
+<script>try{var t=localStorage.getItem("dn_theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<script src="/d.js"></script>
+</head>
+<body>
+<main id="main">
+  <div class="head">
+    <h1>The cover wall</h1>
+    <p>Every album in the official catalogue, from the 1962 debut to the latest archive release. Tap a cover for the official page and where to listen.</p>
+  </div>
+  <div class="tools">
+    <div class="chips" id="cats" role="group" aria-label="Filter by type"></div>
+    <span class="sp"></span>
+    <div class="chips" role="group" aria-label="Order">
+      <button class="chip" type="button" data-o="asc" aria-pressed="true">Oldest first</button>
+      <button class="chip" type="button" data-o="desc" aria-pressed="false">Newest first</button>
+    </div>
+  </div>
+  <div class="wall" id="wall"><div class="loading">Loading…</div></div>
+</main>
+<dialog id="dlg" aria-labelledby="dlgT"></dialog>
+<script>
+D.shell("albums");
+(async () => {
+  const albums = await D.albums();
+  let cat = new URLSearchParams(location.search).get("c") || "all";
+  let order = "asc";
+  const count = (c) => (c === "all" ? albums.length : albums.filter((a) => a.c.includes(c)).length);
+  const cats = [["all", "All"], ["studio", "Studio"], ["live", "Live"], ["comp", "Compilations"], ["bootleg", "Bootleg Series"]];
+  const C = document.getElementById("cats");
+  C.innerHTML = cats.map(([k, l]) => `<button class="chip" type="button" data-c="${k}" aria-pressed="${k === cat}">${l}<span class="n">${count(k)}</span></button>`).join("");
+  C.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-c]"); if (!b) return;
+    cat = b.dataset.c;
+    C.querySelectorAll("[data-c]").forEach((x) => x.setAttribute("aria-pressed", x === b));
+    history.replaceState(null, "", cat === "all" ? location.pathname : "?c=" + cat);
+    draw();
+  });
+  document.querySelectorAll("[data-o]").forEach((b) => b.addEventListener("click", () => {
+    order = b.dataset.o;
+    document.querySelectorAll("[data-o]").forEach((x) => x.setAttribute("aria-pressed", x === b));
+    draw();
+  }));
+
+  const W = document.getElementById("wall");
+  function draw() {
+    let list = albums.filter((a) => cat === "all" || a.c.includes(cat));
+    list = list.slice().sort((a, b) => (order === "asc" ? a.y - b.y : b.y - a.y) || a.t.localeCompare(b.t));
+    let h = "", dec = null;
+    for (const a of list) {
+      const d = Math.floor(a.y / 10) * 10;
+      if (d !== dec) { dec = d; h += `<div class="yr">${d}s</div>`; }
+      h += `<button class="cv" type="button" data-s="${a.s}"><div class="art">${D.cover(a, 160)}</div><b>${D.esc(a.t)}</b><span>${a.y} · ${a.c.map((c) => D.CAT[c]).join(", ")}</span></button>`;
+    }
+    W.innerHTML = h || `<p class="empty">Nothing here.</p>`;
+  }
+  draw();
+
+  const dlg = document.getElementById("dlg");
+  W.addEventListener("click", (e) => {
+    const b = e.target.closest("[data-s]"); if (!b) return;
+    const a = albums.find((x) => x.s === b.dataset.s);
+    const rel = a.sp && !a.spx ? `<p class="small muted">Spotify has a related edition${a.relt ? ` (${D.esc(a.relt)})` : ""}, not this exact release.</p>` : "";
+    dlg.innerHTML = `<div class="dlg"><button class="x" type="button" aria-label="Close">×</button>
+      <div>${D.cover(a, 180, 'loading="eager"')}</div>
+      <div><span class="tag">${a.c.map((c) => D.CAT[c]).join(", ")}</span>
+        <h2 id="dlgT" style="margin:8px 0 2px">${D.esc(a.t)}</h2><div class="muted">${a.y}</div>
+        <div class="btns">${D.spotify(a)}<a class="btn" href="${a.o}" target="_blank" rel="noopener">Official page</a></div>${rel}
+      </div></div>`;
+    dlg.querySelector(".x").onclick = () => dlg.close();
+    dlg.showModal();
+  });
+  dlg.addEventListener("click", (e) => { if (e.target === dlg) dlg.close(); });
+})();
+</script>
+</body>
+</html>

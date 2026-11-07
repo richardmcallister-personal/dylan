@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Song · Dylan Notes</title>
+<meta name="description" content="One Bob Dylan song through the years: recordings and every live performance on record.">
+<link rel="preload" href="/fonts/fraunces-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/d.css">
+<link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/icon-180.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#1a1814">
+<script>try{var t=localStorage.getItem("dn_theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<script src="/d.js"></script>
+</head>
+<body>
+<main id="main"><div class="loading">Loading…</div></main>
+<script>
+D.shell("songs");
+(async () => {
+  const M = document.getElementById("main");
+  const slug = D.slug(D.qs("s") || "");
+  const songs = await D.get("/data/songs.json");
+  const s = songs.find((x) => x.s === slug);
+  if (!s) {
+    M.innerHTML = `<div class="head"><h1>Song not found</h1><p>No live performance of that song is on record. <a href="/songs/">Browse all songs</a>.</p></div>`;
+    return;
+  }
+  document.title = `${s.n} · Dylan Notes`;
+  const rank = songs.indexOf(s) + 1;
+  const [perf, lives, albums] = await Promise.all([
+    D.get(`/data/song/${slug}.json`),
+    D.get(`/data/lives/${slug}.json`).catch(() => null),
+    D.albums(),
+  ]);
+  const byS = Object.fromEntries(albums.map((a) => [a.s, a]));
+  const years = Object.keys(s.y).map(Number);
+  const peak = Object.entries(s.y).sort((a, b) => b[1] - a[1])[0];
+  const thisYear = new Date().getFullYear();
+  const spotify = `https://open.spotify.com/search/${encodeURIComponent("Bob Dylan " + s.n)}`;
+  const lyrics = `https://www.bobdylan.com/?s=${encodeURIComponent(s.n)}`;
+
+  let h = `<div class="head"><span class="tag">${s.c ? "Cover · " + D.esc(s.c) : "Song"}</span>
+    <h1 style="margin-top:8px">${D.esc(s.n)}</h1>
+    ${lives ? `<p>${D.esc(lives.intro)}</p>` : ""}
+    <div class="btns"><a class="btn pri" href="${spotify}" target="_blank" rel="noopener">Find on Spotify</a>${s.c ? "" : `<a class="btn" href="${lyrics}" target="_blank" rel="noopener">Lyrics on bobdylan.com</a>`}</div></div>
+    <div class="tiles" style="margin-bottom:16px">
+      <div class="tile"><b class="num">${s.k}</b><span>times played live · #${rank} overall</span></div>
+      <div class="tile"><b class="num">${s.f[0].slice(0, 4)}</b><span>first: <a href="/concert/?id=${s.f[1]}">${D.date(s.f[0])}</a></span></div>
+      <div class="tile"><b class="num">${s.l[0].slice(0, 4)}</b><span>latest: <a href="/concert/?id=${s.l[1]}">${D.date(s.l[0])}</a></span></div>
+      <div class="tile"><b class="num">${years.length}</b><span>different years · peak ${peak[0]} (${peak[1]})</span></div>
+    </div>`;
+
+  if (lives) {
+    h += `<section class="sheet"><span class="tag">One song, many lives</span><h2 style="margin-top:8px">Through the years</h2><ol class="lives">` +
+      lives.lives.map((l) => {
+        const a = l.a && byS[l.a];
+        const when = l.d.length === 7 ? D.date(l.d + "-01").replace(/^1 /, "") : D.date(l.d);
+        const links = [a ? `<a href="${a.o}" target="_blank" rel="noopener">${D.esc(a.t)}</a>` : "", a ? D.spotify(a).replace('class="btn pri"', 'class="btn"') : "", l.id ? `<a href="/concert/?id=${l.id}">Setlist</a>` : ""].filter(Boolean);
+        return `<li class="life">${a ? `<div class="thumb">${D.cover(a, 72)}</div>` : `<div class="dot"><i></i></div>`}<div>
+          <div class="when"><span class="tag">${D.esc(l.kind)}</span> ${when} · ${D.esc(l.place)}</div>
+          <h3>${D.esc(l.title)}</h3><p style="margin:2px 0 6px">${D.esc(l.note)}</p>
+          <div class="btns" style="margin-top:4px;align-items:center">${links.join(" ")}</div></div></li>`;
+      }).join("") + `</ol>` +
+      (lives.others && lives.others.length ? `<h3 style="margin-top:16px">Others who made it their own</h3><ul class="rows">${lives.others.map((o) => `<li><div class="r"><b>${D.esc(o.who)}</b><span class="muted small">${D.esc(o.note)}</span></div></li>`).join("")}</ul>` : "") +
+      `</section>`;
+  }
+
+  h += `<section class="sheet"><h2>Live, year by year</h2>${D.bars(s.y, Math.min(...years), Math.max(thisYear, ...years), (y, n) => n && n === peak[1])}
+    <p class="small muted" style="margin-top:8px">From setlists on record at setlist.fm. Some tours are not in the data yet, notably 1974 with the Band and most of 1986–87, so those years show as gaps.</p></section>`;
+
+  // Performances by year, newest first
+  const byYear = {};
+  for (const p of perf.p) (byYear[p[0].slice(0, 4)] = byYear[p[0].slice(0, 4)] || []).push(p);
+  const ylist = Object.keys(byYear).sort().reverse();
+  h += `<section class="sheet"><h2>Every performance <span class="muted small" style="font-family:var(--body);font-weight:400">${perf.p.length}</span></h2>` +
+    ylist.map((y, i) => `<details class="yr-perf"${i === 0 ? " open" : ""}><summary>${y} <span class="muted">· ${byYear[y].length}</span></summary><ul>` +
+      byYear[y].slice().reverse().map(([d, id, v, c, cc]) => `<li><a href="/concert/?id=${id}">${D.date(d)}</a> · ${D.esc(v)}, ${D.esc(c)} <span class="muted">${cc}</span></li>`).join("") + `</ul></details>`).join("") +
+    `</section>`;
+  M.innerHTML = h;
+})();
+</script>
+</body>
+</html>
