@@ -116,7 +116,7 @@ for s in past:
 
 with_songs = [s for s in past if any(x["s"] for x in s["sets"])]
 index = {
-    "built": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%MZ"),
+    "built": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%MZ"),
     "total": len(past),
     "withSetlist": len(with_songs),
     "songs": len(out),
