@@ -94,6 +94,21 @@
     }
   };
 
+  // Site footer (manutd.wiki pattern): brand and sources, then the sections and official links.
+  function siteFooter() {
+    const col = (h, links) => `<div class="fcol"><h2>${h}</h2><ul>${links.map(([href, label]) => `<li><a href="${href}"${/^https?:/.test(href) ? ' target="_blank" rel="noopener"' : ""}>${label}</a></li>`).join("")}</ul></div>`;
+    return `<div class="sitefoot">
+      <div class="fbrand"><a class="fname" href="/"><span>Bob Dylan</span></a><small>Fan site</small>
+        <p>The records, the songs and every show on record since 1956, kept by a fan.</p></div>
+      <div class="fcols">
+        ${col("Listen", [["/albums/", "Albums"], ["/journeys/", "Listening journeys"], ["/songs/", "Songs"], ["/song/?s=like-a-rolling-stone", "One song, many lives"]])}
+        ${col("Live", [["/concerts/#tour", "On tour"], ["/concerts/", "Shows by year"]])}
+        ${col("Archive", [["/books/", "Books"], ["/influences/", "Influences"], ["/timeline/", "Timeline"]])}
+        ${col("Official", [["https://www.bobdylan.com/", "bobdylan.com"], ["https://www.bobdylan.com/on-tour/", "Tour and tickets"], ["https://www.bobdylancenter.com/", "Bob Dylan Center"], ["https://www.setlist.fm/setlists/bob-dylan-23d6b8d3.html", "setlist.fm"]])}
+      </div>
+    </div>`;
+  }
+
   D.shell = (page) => {
     const nav = [...NAV, ...archiveNav].map(([k, href, label]) => `<a class="${archiveNav.some(([id]) => id === k) ? "archive-link" : "main-link"}" href="${href}"${k === page ? ' aria-current="page"' : ""}>${label}</a>`).join("");
     const tabs = NAV.map(([k, href, label, p]) => `<a href="${href}"${k === page ? ' aria-current="page"' : ""}>${ic(p)}<span>${label}</span></a>`).join("");
@@ -108,9 +123,12 @@
     document.body.insertAdjacentHTML(
       "beforeend",
       `<nav class="tabbar" aria-label="Main">${tabs}</nav>
-      <footer class="mu wrap">
-        <div>Setlists from <a href="https://www.setlist.fm/setlists/bob-dylan-23d6b8d3.html" rel="noopener">setlist.fm</a>. Tour dates and tickets from <a href="https://www.bobdylan.com/on-tour/" rel="noopener">bobdylan.com</a>.</div>
-        <div class="theme" role="group" aria-label="Theme"><span>Theme</span><button type="button" data-t="auto">Auto</button><button type="button" data-t="light">Light</button><button type="button" data-t="dark">Dark</button></div>
+      <footer class="mu wrap big">${siteFooter()}
+        <div class="fnotes">
+          <p>This is a fan site, not connected with Bob Dylan, his management or his record label. For the official site, lyrics and news, go to <a href="https://www.bobdylan.com/" rel="noopener">bobdylan.com</a>.</p>
+          <p>Setlists from <a href="https://www.setlist.fm/setlists/bob-dylan-23d6b8d3.html" rel="noopener">setlist.fm</a>, compiled by its users. Tour dates and ticket links from <a href="https://www.bobdylan.com/on-tour/" rel="noopener">bobdylan.com</a>. Album artwork © the respective rights holders, shown to identify each record.</p>
+          <div class="theme" role="group" aria-label="Theme"><span>Theme</span><button type="button" data-t="auto">Auto</button><button type="button" data-t="light">Light</button><button type="button" data-t="dark">Dark</button></div>
+        </div>
       </footer>`
     );
     const t = curTheme();
