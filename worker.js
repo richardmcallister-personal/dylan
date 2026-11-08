@@ -99,6 +99,15 @@ async function health(env) {
       out.anthropic.error = String(e);
     }
   }
+  out.discogs = { ok: false };
+  try {
+    const d = await discogs(env, "/masters/1083?_health=" + Math.floor(Date.now() / 3600000), 60);
+    out.discogs.ok = !!d.id;
+    out.discogs.auth = discogsAuth(env).how;
+  } catch (e) {
+    out.discogs.error = e.msg || String(e);
+    out.discogs.auth = discogsAuth(env).how;
+  }
   out.spotify = { ok: false };
   try {
     await spotifyToken(env);
@@ -107,6 +116,32 @@ async function health(env) {
     out.spotify.error = e.msg || String(e);
   }
   return json(out);
+}
+
+// Discogs: refuses requests without a descriptive User-Agent. Auth from a personal token or a consumer key/secret,
+// whichever secret name Richard used.
+function discogsAuth(env) {
+  const tok = env.DISCOGS_TOKEN || env.DISCOGS_API_TOKEN || env.DISCOGS_USER_TOKEN || env.DISCOGS_PERSONAL_ACCESS_TOKEN || env.DISCOGS_API_KEY;
+  if (tok) return { how: "token", header: `Discogs token=${tok}` };
+  const key = env.DISCOGS_KEY || env.DISCOGS_CONSUMER_KEY, secret = env.DISCOGS_SECRET || env.DISCOGS_CONSUMER_SECRET;
+  if (key && secret) return { how: "key+secret", header: `Discogs key=${key}, secret=${secret}` };
+  return { how: "none" };
+}
+async function discogs(env, path, ttl) {
+  const key = "discogs:v1:" + path;
+  if (env.DYLAN_CACHE) {
+    const hit = await env.DYLAN_CACHE.get(key, "json");
+    if (hit) return hit;
+  }
+  const auth = discogsAuth(env);
+  const headers = { "user-agent": "BobDylanApp/1.0 +https://bobdylan.app", accept: "application/vnd.discogs.v2.discogs+json" };
+  if (auth.header) headers.authorization = auth.header;
+  const r = await fetch("https://api.discogs.com" + path, { headers });
+  if (r.status === 429) throw { status: 429, msg: "Discogs rate limit" };
+  if (!r.ok) throw { status: r.status === 404 ? 404 : 502, msg: "Discogs " + r.status + " (" + auth.how + ")" };
+  const d = await r.json();
+  if (env.DYLAN_CACHE) await env.DYLAN_CACHE.put(key, JSON.stringify(d), { expirationTtl: Math.max(60, ttl) });
+  return d;
 }
 
 // Spotify: app token via client credentials (secrets SPOTIFY_CLIENT_ID / SPOTIFY_CLIENT_SECRET), cached in KV.
@@ -152,6 +187,20 @@ async function api(url, env) {
   const p = url.pathname;
   try {
     // Wikipedia wikitext for an allow-listed album article (builder use only). Cached 7 days.
+    // Discogs, for the album builder: search (Bob Dylan only), masters, master versions, releases. Cached 7 days.
+    if (p === "/api/discogs") {
+      const path = url.searchParams.get("path") || "";
+      const ok =
+        /^\/masters\/\d+(\/versions\?page=\d+&per_page=\d+)?$/.test(path) ||
+        /^\/releases\/\d+$/.test(path) ||
+        /^\/database\/search\?type=(master|release)&artist=Bob(%20|\+)Dylan&release_title=[^&]{1,200}(&per_page=\d+)?$/.test(path);
+      if (!ok) return json({ error: "path not allowed" }, 403);
+      try {
+        return json(await discogs(env, path, 86400 * 7), 200, 3600);
+      } catch (e) {
+        return json({ error: e.msg || String(e) }, e.status || 502);
+      }
+    }
     if (p === "/api/wiki") {
       const t = url.searchParams.get("t") || "";
       if (!WIKI_OK.has(t)) return json({ error: "title not allowed" }, 403);
