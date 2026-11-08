@@ -8,7 +8,7 @@ const UA = "bobdylan.app/1.0 (+https://github.com/richardmcallister-personal/dyl
 
 // Wikipedia articles the album builder may read (tools/build_albums.py). Allow-listed so this is not an open proxy.
 import WIKI_TITLES from "./tools/wiki_titles.json";
-const WIKI_OK = new Set(Object.values(WIKI_TITLES));
+const WIKI_OK = new Set(Object.values(WIKI_TITLES).filter(Boolean));
 
 const json = (data, status = 200, maxAge = 0) =>
   new Response(JSON.stringify(data), {
