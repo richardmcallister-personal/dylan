@@ -413,3 +413,4 @@ dialog.lb{max-width:min(1200px,calc(100% - 24px));width:auto;background:var(--bl
 .lbx{top:8px;right:8px}
 .lbn{top:calc(50% - 50px)}
 .lbn.prev{left:8px}.lbn.next{right:8px}
+@media (max-width:640px){.chips.gscroll{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;margin-left:-16px;margin-right:-16px;padding:0 16px}.chips.gscroll::-webkit-scrollbar{display:none}.chips.gscroll .chip{flex:none}}

@@ -18,9 +18,9 @@
 <main id="main" class="wrap">
   <div class="head"><h1>Gallery</h1><p>Bob Dylan on stage and on the road, 1963 to 2023, in date order.</p></div>
   <div class="chips" id="decades" role="group" aria-label="Filter by decade"></div>
+  <div class="chips gscroll" id="places" role="group" aria-label="Filter by country"></div>
   <div class="tools">
     <select id="year" class="find gsel" aria-label="Year"><option value="">All years</option></select>
-    <select id="country" class="find gsel" aria-label="Country"><option value="">All countries</option></select>
     <input type="search" class="find" id="q" placeholder="Venue or city" aria-label="Search by venue or city">
     <span class="sp"></span>
     <div class="chips" role="group" aria-label="Order">
@@ -45,7 +45,7 @@ D.shell("gallery");
 (async () => {
   const all = await D.get("/data/gallery.json");
   const $ = (id) => document.getElementById(id);
-  const G = $("grid"), DEC = $("decades"), Y = $("year"), C = $("country"), Q = $("q"), N = $("count");
+  const G = $("grid"), DEC = $("decades"), Y = $("year"), C = $("places"), Q = $("q"), N = $("count");
   const P = new URLSearchParams(location.search);
   const st = { d: P.get("d") || "", y: P.get("y") || "", c: P.get("c") || "", q: P.get("q") || "", o: P.get("o") === "desc" ? "desc" : "asc" };
   const dec = (y) => Math.floor(y / 10) * 10;
@@ -55,7 +55,6 @@ D.shell("gallery");
   const when = (p) => (p.show ? D.date(p.show.d, true) : String(p.y));
   let shown = [];
 
-  C.innerHTML += countries.map((c) => `<option>${D.esc(c)}</option>`).join("");
   Q.value = st.q;
 
   const years = () => [...new Set(all.filter((p) => !st.d || dec(p.y) === +st.d).map((p) => p.y))];
@@ -76,7 +75,10 @@ D.shell("gallery");
     if (st.o === "desc") shown.reverse();
     DEC.innerHTML = `<button class="chip" type="button" data-d="" aria-pressed="${!st.d}">All<span class="n">${all.length}</span></button>` +
       decades.map((d) => `<button class="chip" type="button" data-d="${d}" aria-pressed="${String(d) === st.d}">${d}s<span class="n">${all.filter((p) => dec(p.y) === d).length}</span></button>`).join("");
-    C.value = st.c;
+    const inScope = all.filter((p) => (!st.d || dec(p.y) === +st.d) && (!st.y || p.y === +st.y));
+    C.innerHTML = `<button class="chip" type="button" data-c="" aria-pressed="${!st.c}">All countries</button>` +
+      countries.map((c) => [c, inScope.filter((p) => p.country === c).length]).filter(([c, n]) => n || c === st.c)
+        .map(([c, n]) => `<button class="chip" type="button" data-c="${D.esc(c)}" aria-pressed="${c === st.c}">${D.esc(c)}<span class="n">${n}</span></button>`).join("");
     N.textContent = shown.length === all.length ? `${all.length} photographs` : `${shown.length} of ${all.length} photographs`;
     if (!shown.length) { G.innerHTML = `<p class="empty">No photographs match. <a href="/gallery/">Show all</a>.</p>`; return; }
     const groups = [];
@@ -130,7 +132,7 @@ D.shell("gallery");
   // Filters
   DEC.addEventListener("click", (e) => { const b = e.target.closest("[data-d]"); if (!b) return; st.d = b.dataset.d; st.y = ""; fillYears(); render(); save(); });
   Y.addEventListener("change", () => { st.y = Y.value; render(); save(); });
-  C.addEventListener("change", () => { st.c = C.value; render(); save(); });
+  C.addEventListener("click", (e) => { const b = e.target.closest("[data-c]"); if (!b) return; st.c = b.dataset.c; render(); save(); });
   let t;
   Q.addEventListener("input", () => { clearTimeout(t); t = setTimeout(() => { st.q = Q.value; render(); save(); }, 150); });
   document.querySelectorAll("[data-o]").forEach((b) => b.addEventListener("click", () => {
