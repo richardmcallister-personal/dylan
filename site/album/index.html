@@ -53,12 +53,18 @@ D.shell("albums");
   ].filter(([, v]) => v);
 
   // Tracks, grouped by side/disc
-  const groups = [];
+  const groups = [], seenSide = new Set();
+  let edition = 0;
   for (const t of d.tracks || []) {
     let g = groups[groups.length - 1];
-    if (!g || g.side !== t.side) groups.push((g = { side: t.side, tracks: [] }));
+    if (!g || g.raw !== t.side) {
+      if (t.side && seenSide.has(t.side)) { edition++; seenSide.clear(); }
+      if (t.side) seenSide.add(t.side);
+      groups.push((g = { raw: t.side, side: (edition ? "Other edition · " : "") + (t.side || ""), tracks: [] }));
+    }
     g.tracks.push(t);
   }
+  const mainCount = groups.filter((g) => !g.side.startsWith("Other edition")).reduce((n, g) => n + g.tracks.length, 0);
   const BIG = (d.tracks || []).length > 60;
   const trackRow = (t) => {
     const k = key(t.title), s = live[D.slug(t.title.replace(/\s*\(.*?\)\s*$/, ""))], ly = lyr[k];
@@ -102,7 +108,7 @@ D.shell("albums");
         ${(d.certs || []).length ? `<h3>Certifications</h3><p class="small">${d.certs.map((c) => `${D.esc(c.region)}: ${D.esc(c.award)}`).join(" · ")}</p>` : ""}</section>` : (d.certs || []).length ? `<section class="sheet"><h2>Certifications</h2><p class="small">${d.certs.map((c) => `${D.esc(c.region)}: ${D.esc(c.award)}`).join(" · ")}</p></section>` : ""}
     </div>
     <div class="col">
-      <section class="sheet"><h2 class="row"><span>Tracks</span><span class="muted small" style="font-weight:400">${(d.tracks || []).length || ""}</span></h2>
+      <section class="sheet"><h2 class="row"><span>Tracks</span><span class="muted small" style="font-weight:400">${mainCount || ""}</span></h2>
         ${tracksHtml || `<p class="empty">Track list not available yet.</p>`}
         <p class="small muted" style="margin:12px 0 0">Lyrics open on bobdylan.com. Live counts come from setlists on record at setlist.fm.</p></section>
       ${people ? `<section class="sheet"><h2>Who played</h2>${people}</section>` : ""}
