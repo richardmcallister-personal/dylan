@@ -88,3 +88,12 @@ plain, factual, own words, never lyrics or long quotes. Track titles link to son
 official lyric page on bobdylan.com via `site/data/lyric_links.json` (titles → URLs only; no lyric text is stored).
 Inner sleeves and other artwork are linked out to Discogs, not hosted. The home hero's album strip is a scrolling
 carousel linking to album pages; the cover wall and search open album pages (`/albums/?a=` redirects).
+
+## Gallery (8 Nov 2026)
+
+`/gallery/`: Richard's 300 photographs in `site/assets/dylan-concert-photos/` (`photos/` full frame, `square-photos/`
+padded squares — not used; file names `NNN-YYYY-place-slug.jpg`). `tools/build_gallery.py` parses year/venue/city/
+country from the names (fix-ups in its FIX and SPLIT tables), cuts 360 px webp thumbs into `thumbs/`, matches each
+photo to a setlist.fm show by year + city/venue, and writes `site/data/gallery.json`. Page: decade chips, year and
+country selects, venue/city search, oldest/newest, year headers, lightbox (arrows, swipe, keys) with a Setlist link.
+Filters live in the URL (`?d=1960&y=1966&c=England&q=…&o=desc`). Re-run the builder after adding photos.

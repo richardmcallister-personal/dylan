@@ -387,3 +387,29 @@ ul.people span{color:var(--muted);font-size:14px}
 .hero .carousel .arr{position:absolute;top:34px;width:36px;height:36px;border-radius:50%;border:0;background:var(--paper);color:var(--ink);font-size:18px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.35);z-index:2}
 .hero .carousel .arr.l{left:-6px}.hero .carousel .arr.r{right:-6px}
 @media (max-width:640px){.hero .carousel .arr{display:none}}
+
+/* Gallery (8 Nov 2026) */
+select.gsel{appearance:none;-webkit-appearance:none;font:15px var(--body);height:42px;padding:0 34px 0 16px;border-radius:999px;border:1px solid var(--rule);color:var(--ink);background:var(--paper) url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2712%27 height=%278%27%3E%3Cpath d=%27M1 1l5 5 5-5%27 fill=%27none%27 stroke=%27gray%27 stroke-width=%271.6%27/%3E%3C/svg%3E") no-repeat right 14px center;width:auto;max-width:200px;cursor:pointer}
+.gyear{margin:8px 0 28px}
+.gyear h2{display:flex;align-items:baseline;gap:14px;margin:0 0 12px}
+.gyear h2 .big{font:400 34px/1 var(--brand);letter-spacing:.01em}
+.gal{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.gal button{appearance:none;border:0;padding:0;margin:0;width:100%;background:var(--paper);color:var(--ink);border-radius:14px;overflow:hidden;cursor:zoom-in;text-align:left;font:inherit;display:block}
+.gal img{display:block;width:100%;height:auto;aspect-ratio:1;object-fit:cover;background:var(--tint);transition:transform .25s ease}
+.gal button:hover img{transform:scale(1.03)}
+.gal button span{display:block;padding:8px 10px 10px}
+.gal b{display:block;font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gal small{display:block;font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gal button:focus-visible{outline:3px solid var(--red-ink);outline-offset:2px}
+@media (max-width:640px){.gal{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.gal button span{padding:6px 8px 8px}.gsel{max-width:none;flex:1}}
+dialog.lb{max-width:min(1200px,calc(100% - 24px));width:auto;background:var(--black);color:var(--on-black);overflow:visible}
+.lb figure{margin:0}
+.lb img{display:block;max-width:100%;max-height:calc(100vh - 150px);width:auto;height:auto;margin:0 auto;border-radius:var(--radius) var(--radius) 0 0}
+.lb figcaption{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px 14px}
+.lb figcaption b{display:block;font-size:16px}
+.lb figcaption small{color:var(--muted-on-black);font-size:13px}
+.lb .btn{color:var(--on-black);box-shadow:inset 0 0 0 1.5px var(--muted-on-black);flex:none}
+.lbx,.lbn{position:absolute;appearance:none;border:0;cursor:pointer;width:44px;height:44px;border-radius:999px;background:var(--black);color:var(--on-black);font:400 28px/44px var(--body);text-align:center;padding:0}
+.lbx{top:8px;right:8px}
+.lbn{top:calc(50% - 50px)}
+.lbn.prev{left:8px}.lbn.next{right:8px}

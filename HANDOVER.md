@@ -69,3 +69,10 @@ Re-import the kit (after Richard adds covers): `python3 tools/import_kit.py <pat
   first release's edition); several albums have no chart table in their article (Saved, Shot of Love, Oh Mercy,
   Under the Red Sky, etc.); personnel missing for most compilations and some archive sets.
 - Re-run: `python3 tools/build_albums.py` (reads Wikipedia through bobdylan.app/api/wiki, cached in KV 7 days).
+
+## 8 Nov 2026 — gallery
+
+- `/gallery/` with Richard's 300 photos (1963–2023), in date order, filter by decade/year/country/place, lightbox.
+  238 photos matched to one setlist.fm show (link to its setlist); 54 to a city with several shows that year (link
+  to that year); 8 unmatched (mostly years missing from setlist.fm, e.g. 1974/1986–87).
+- No photographer credits yet — the photos came without metadata. Add a credits field to gallery.json when known.
