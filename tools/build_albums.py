@@ -13,7 +13,7 @@ site/data/albums.json. Writes site/data/album/<slug>.json with:
   wiki: {title, url, revid}                                                 (source, CC BY-SA)
 Only facts and titles are taken — never lyrics or article prose. Editorial text lives in data/album_notes.json.
 """
-import argparse, json, re, sys, time, urllib.parse, urllib.request
+import argparse, json, re, sys, time, urllib.error, urllib.parse, urllib.request
 from pathlib import Path
 import mwparserfromhell as mw
 
@@ -91,11 +91,36 @@ def plain(x):
     return s
 
 
-def section(code, name_re):
-    for sec in code.get_sections(levels=[2, 3], include_lead=False):
-        head = sec.filter_headings()[0]
-        if re.search(name_re, str(head.title).strip(), re.I):
-            return sec
+SECTIONS = {}
+
+
+def sections_of(wikitext):
+    """Split wikitext on heading lines (robust to unbalanced templates that confuse a full parse)."""
+    out, cur, buf = [], ("", 1), []
+    for line in wikitext.split("\n"):
+        m = re.match(r"^(={2,4})\s*(.+?)\s*\1\s*$", line)
+        if m:
+            out.append((cur[0], cur[1], "\n".join(buf)))
+            cur, buf = (plain(m.group(2)), len(m.group(1))), []
+        else:
+            buf.append(line)
+    out.append((cur[0], cur[1], "\n".join(buf)))
+    return out
+
+
+def section(code, name_re, stop_sub=None):
+    """Text of the first section whose heading matches, including its subsections (minus any matching stop_sub)."""
+    secs = SECTIONS["cur"]
+    for i, (h, lvl, body) in enumerate(secs):
+        if h and re.search(name_re, h, re.I):
+            parts = [body]
+            for h2, l2, b2 in secs[i + 1:]:
+                if l2 <= lvl:
+                    break
+                if stop_sub and re.search(stop_sub, h2, re.I):
+                    continue
+                parts.append(f"=== {h2} ===\n" + b2)
+            return "\n".join(parts)
     return None
 
 
@@ -116,7 +141,7 @@ def ib(t, *names):
 
 
 def split_list(s):
-    return [x.strip() for x in re.split(r";|\s*,\s*(?=[A-Z])|\s+and\s+(?=[A-Z])", s) if x.strip()]
+    return [x.strip(" *") for x in re.split(r";|\s\*|^\*", s) if x.strip(" *")]
 
 
 def personnel(code):
@@ -124,8 +149,7 @@ def personnel(code):
     if not sec:
         return []
     out, group = [], ""
-    body = str(sec).split("\n", 1)[1] if "\n" in str(sec) else ""
-    for line in body.split("\n"):
+    for line in sec.split("\n"):
         L = line.strip()
         if not L:
             continue
@@ -148,11 +172,14 @@ def personnel(code):
 def tracks(code):
     out = []
     for t in code.filter_templates():
-        if str(t.name).strip().lower().replace("_", " ") not in ("track listing", "tracklist", "track list"):
+        if str(t.name).strip().lower().replace("_", "").replace(" ", "") not in ("tracklisting", "tracklist"):
             continue
         side = plain(t.get("headline").value) if t.has("headline") else ""
+        if re.search(r"track ?listing", side, re.I):
+            side = ""
         allw = plain(t.get("all_writing").value) if t.has("all_writing") else ""
-        allw = re.sub(r",?\s*except where noted\.?", "", allw, flags=re.I)
+        allw = re.sub(r",?\s*except where (otherwise )?noted.*$", "", allw, flags=re.I)
+        allw = re.split(r"\.\s", allw)[0].strip(" .")
         extra_col = plain(t.get("extra_column").value) if t.has("extra_column") else ""
         i = 1
         while t.has(f"title{i}"):
@@ -187,38 +214,63 @@ CHART_NAMES = {
 }
 
 
+def table_rows(text):
+    """Yield rows (list of plain cell strings) from wikitables, applying rowspans."""
+    for tbl in re.findall(r"\{\|.*?\n\|\}", text, re.S):
+        span = {}  # col -> (value, remaining)
+        for raw in re.split(r"\n\|-[^\n]*", tbl)[1:]:
+            cells = []
+            for line in raw.strip("\n").split("\n"):
+                line = line.strip()
+                if not line or line.startswith("|}") or line.startswith("{|"):
+                    continue
+                if line[0] in "!|":
+                    sep = "!!" if line[0] == "!" else "||"
+                    for c in line[1:].split(sep):
+                        cells.append(c)
+                elif cells:
+                    cells[-1] += " " + line
+            row, col = [], 0
+            for c in cells:
+                while col in span and span[col][1] > 0:
+                    v, n = span[col]; row.append(v); span[col] = (v, n - 1); col += 1
+                rs = re.search(r'rowspan\s*=\s*"?(\d+)', c)
+                val = c.split("|", 1)[1] if re.match(r'^\s*[a-z-]+\s*=\s*"?[^|]*"?\s*\|', c) else c
+                val = plain(val)
+                if rs:
+                    span[col] = (val, int(rs.group(1)) - 1)
+                row.append(val); col += 1
+            while col in span and span[col][1] > 0:
+                v, n = span[col]; row.append(v); span[col] = (v, n - 1); col += 1
+            yield row
+
+
 def charts(code):
-    sec = section(code, r"^charts?$|chart positions|^weekly charts|^chart performance")
+    sec = section(code, r"^charts?$|chart positions|^weekly charts|^chart performance|^charts and certifications|^chart history", stop_sub=r"single|year-end|year end|decade|certif")
     if not sec:
         return []
-    out, year = [], ""
-    s = str(sec)
-    # walk lines of wikitables; album chart templates first
-    for t in sec.filter_templates():
-        n = str(t.name).strip().lower()
-        if n == "album chart":
+    out = []
+    for t in mw.parse(sec).filter_templates():
+        if str(t.name).strip().lower() == "album chart":
             ps = [str(p.value).strip() for p in t.params if not p.showkey]
             if len(ps) >= 2:
-                key = ps[0].lower()
-                out.append({"chart": CHART_NAMES.get(key, ps[0]), "peak": re.sub(r"[^0-9]", "", ps[1]) or ps[1], "year": ""})
-    rows = re.split(r"\n\|-", s)
-    for r in rows:
-        y = re.search(r"Chart \((\d{4}(?:[–-]\d{2,4})?)\)", r)
-        if y:
-            year = y.group(1)
-        m = re.search(r"!\s*(?:scope=\"?row\"?\s*\|)?\s*(.+?)\n\|\s*(?:style=[^|]*\|)?\s*([0-9]{1,3})\s*(?:\n|$)", r, re.S)
-        if m and "album chart" not in r.lower():
-            name = plain(m.group(1))
-            if name and not name.lower().startswith("chart"):
-                out.append({"chart": name, "peak": m.group(2), "year": year})
-    # attach years to template rows by order of appearance where possible
+                out.append({"chart": CHART_NAMES.get(ps[0].lower(), ps[0]), "peak": re.sub(r"[^0-9]", "", ps[1]) or ps[1], "year": ""})
+    for row in table_rows(sec):
+        nums = [i for i, c in enumerate(row) if re.fullmatch(r"\d{1,3}", c)]
+        names = [i for i, c in enumerate(row) if re.search(r"[A-Za-z]{3}", c) and not re.fullmatch(r"(chart|peak|position|year).*", c, re.I)]
+        if not nums or not names:
+            continue
+        name = row[names[0]]
+        if re.search(r"^\(?\d{4}", name) or len(name) > 70:
+            continue
+        year = next((re.match(r"\d{4}", c).group(0) for c in row if re.fullmatch(r"\d{4}", c)), "")
+        out.append({"chart": name, "peak": row[nums[-1]], "year": year})
     seen, res = set(), []
     for c in out:
-        k = (c["chart"], c["peak"])
+        k = (c["chart"].lower(), c["peak"])
         if k in seen:
             continue
-        seen.add(k)
-        res.append(c)
+        seen.add(k); res.append(c)
     return res[:60]
 
 
@@ -236,12 +288,18 @@ def certs(code):
 
 def mb_tracks(title):
     """MusicBrainz fallback: the release group's earliest official release track list."""
-    q = urllib.parse.quote(f'releasegroup:"{title}" AND artist:"Bob Dylan"')
+    q = urllib.parse.quote(f'releasegroup:({title}) AND artist:"Bob Dylan"')
     hdr = {"user-agent": UA, "accept": "application/json"}
     def get(u):
-        time.sleep(1.1)
-        with urllib.request.urlopen(urllib.request.Request(u, headers=hdr), timeout=60) as r:
-            return json.load(r)
+        for attempt in range(5):
+            time.sleep(1.5 + attempt * 3)
+            try:
+                with urllib.request.urlopen(urllib.request.Request(u, headers=hdr), timeout=60) as r:
+                    return json.load(r)
+            except urllib.error.HTTPError as e:
+                if e.code not in (429, 503):
+                    raise
+        raise RuntimeError("musicbrainz unavailable")
     rg = get(f"https://musicbrainz.org/ws/2/release-group/?query={q}&fmt=json&limit=3")
     if not rg.get("release-groups"):
         return [], None
@@ -261,6 +319,12 @@ def mb_tracks(title):
     return out, {"release": rel["id"], "url": f"https://musicbrainz.org/release/{rel['id']}", "released": rel.get("date", "")}
 
 
+# MusicBrainz release-group titles where the official catalogue title differs.
+MB_TITLE = {
+    "live-1962-1966-rare-performances-from-the-copyright-collections": "Live 1962-1966: Rare Performances From the Copyright Collections",
+    "the-bootleg-series-vol-18-bob-dylans-bootleg-series-volume-18-through-the-open-window-1956-1963": "Through the Open Window, 1956-1963",
+}
+
 n_ok = 0
 for a in ALBUMS:
     slug = a["s"]
@@ -269,6 +333,7 @@ for a in ALBUMS:
     if title:
         d = wiki(title)
         code = mw.parse(d["wikitext"])
+        SECTIONS["cur"] = sections_of(d["wikitext"])
         box = infobox(code)
         rec.update({
             "released": ib(box, "released", "release_date"),
@@ -287,7 +352,7 @@ for a in ALBUMS:
         })
     if not rec.get("tracks"):
         try:
-            tr, mb = mb_tracks(a["t"].split(" – ")[0].replace("’", "'"))
+            tr, mb = mb_tracks(MB_TITLE.get(slug) or a["t"].split(" – ")[0].replace("’", "'"))
             if tr:
                 rec["tracks"] = tr
                 rec["mb"] = mb

@@ -2,7 +2,7 @@
   const [albums, dates, index, milestones] = await Promise.all([D.albums(),D.get("/data/album-dates.json"),D.get("/data/index.json"),D.get("/data/milestones.json")]);
   const releases = albums.map(a => ({
     date:dates[a.s]?.date || String(a.y), kind:"Album", title:a.t,
-    link:"/albums/?a="+encodeURIComponent(a.s), source:dates[a.s]?.source || a.o
+    link:"/album/?a="+encodeURIComponent(a.s), source:dates[a.s]?.source || a.o
   }));
   const years = [...new Set([...Object.keys(index.years), ...[...milestones,...releases].map(e => e.date.slice(0,4))])].sort();
   const yearSelect = document.querySelector("#year"), kindSelect = document.querySelector("#kind"), list = document.querySelector("#years-list");
@@ -16,7 +16,7 @@
   const decades = document.querySelector("#decades");
   const decadeOf = year => Math.floor(Number(year) / 10) * 10;
   let decade = decadeOf(years.includes(D.qs("y")) ? D.qs("y") : "1960");
-  const covers = new Map(albums.map(a => ["/albums/?a="+encodeURIComponent(a.s), a.s]));
+  const covers = new Map(albums.map(a => ["/album/?a="+encodeURIComponent(a.s), a.s]));
   for (const d of [...new Set(years.map(decadeOf))]) {
     const button = document.createElement("button");
     button.type = "button";

@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Album · Bob Dylan fan site</title>
+<meta name="description" content="A Bob Dylan album: musicians, studios, charts, the cover, its influence, every track and where to listen.">
+<link rel="preload" href="/fonts/anton-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/d.css">
+<link rel="icon" href="/assets/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/assets/icon-180.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#b3261e">
+<script>try{var t=localStorage.getItem("dn_theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<script src="/d.js"></script>
+</head>
+<body>
+<main id="main" class="wrap"><div class="loading">Loading…</div></main>
+<script>
+D.shell("albums");
+(async () => {
+  const M = document.getElementById("main");
+  const slug = (D.qs("a") || "").replace(/[^a-z0-9-]/g, "");
+  const albums = await D.albums();
+  const i = albums.findIndex((x) => x.s === slug);
+  const a = albums[i];
+  if (!a) {
+    M.innerHTML = `<div class="head"><h1>Album not found</h1><p><a href="/albums/">Browse all albums</a>.</p></div>`;
+    return;
+  }
+  document.title = `${a.t} (${a.y}) · Bob Dylan fan site`;
+  const [d, notes, songs, lyr] = await Promise.all([
+    D.get(`/data/album/${slug}.json`).catch(() => ({})),
+    D.get("/data/album_notes.json").catch(() => ({})),
+    D.get("/data/songs.json").catch(() => []),
+    D.get("/data/lyric_links.json").catch(() => ({})),
+  ]);
+  const n = notes[slug] || {};
+  const live = Object.fromEntries(songs.map((s) => [s.s, s]));
+  const key = (t) => t.normalize("NFKD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/\(.*?\)/g, "").replace(/['’`‘]/g, "").replace(/[^a-z0-9]+/g, " ").trim();
+  const list = (xs) => (xs || []).filter(Boolean).map(D.esc).join(", ");
+  const [spk, spid] = D.spId(a.sp);
+
+  // Facts
+  const facts = [
+    ["Released", d.released || String(a.y)],
+    ["Recorded", d.recorded],
+    [d.venues && d.venues.length ? "Venues" : "Studios", list((d.venues && d.venues.length ? d.venues : d.studios))],
+    ["Producers", list(d.producers)],
+    ["Label", d.label],
+    ["Length", d.length],
+    ["Genre", list(d.genres)],
+  ].filter(([, v]) => v);
+
+  // Tracks, grouped by side/disc
+  const groups = [];
+  for (const t of d.tracks || []) {
+    let g = groups[groups.length - 1];
+    if (!g || g.side !== t.side) groups.push((g = { side: t.side, tracks: [] }));
+    g.tracks.push(t);
+  }
+  const BIG = (d.tracks || []).length > 60;
+  const trackRow = (t) => {
+    const k = key(t.title), s = live[D.slug(t.title.replace(/\s*\(.*?\)\s*$/, ""))], ly = lyr[k];
+    const meta = [t.writer && !/^bob dylan$/i.test(t.writer) ? D.esc(t.writer) : "", t.rec ? "rec. " + D.esc(t.rec) : "", t.note ? D.esc(t.note) : ""].filter(Boolean).join(" · ");
+    return `<li><span class="tt">${s ? `<a href="/song/?s=${s.s}">${D.esc(t.title)}</a>` : D.esc(t.title)}${meta ? `<small>${meta}</small>` : ""}</span>
+      <span class="tm">${s ? `<a class="pill" href="/song/?s=${s.s}" title="Times played live">${s.k} live</a>` : ""}${ly ? `<a class="pill" href="https://www.bobdylan.com${ly}" target="_blank" rel="noopener">Lyrics</a>` : ""}<span class="len num">${D.esc(t.length || "")}</span></span></li>`;
+  };
+  const tracksHtml = groups.map((g, gi) => {
+    const rows = `<ol class="tracks" start="${g.tracks[0].n || 1}">${g.tracks.map(trackRow).join("")}</ol>`;
+    const head = g.side ? D.esc(g.side) : groups.length > 1 ? `Part ${gi + 1}` : "";
+    return BIG ? `<details class="yr-perf"${gi === 0 ? " open" : ""}><summary>${head || "Tracks"} <span class="muted">· ${g.tracks.length}</span></summary>${rows}</details>` : `${head ? `<h3>${head}</h3>` : ""}${rows}`;
+  }).join("");
+
+  // Personnel, grouped
+  const pg = {};
+  for (const p of d.personnel || []) (pg[p.group || "Musicians"] = pg[p.group || "Musicians"] || []).push(p);
+  const people = Object.entries(pg).map(([g, ps]) =>
+    `<h3>${D.esc(g)}</h3><ul class="people">${ps.map((p) => `<li><b>${D.esc(p.name)}</b>${p.role ? `<span>${D.esc(p.role)}</span>` : ""}</li>`).join("")}</ul>`).join("");
+
+  const charts = (d.charts || []).slice().sort((x, y) => +x.peak - +y.peak);
+  const prev = albums[i - 1], next = albums[i + 1];
+
+  M.innerHTML = `
+  <section class="ahero">
+    <div class="acover">${D.cover(a, 320, 'loading="eager"')}</div>
+    <div class="ainfo">
+      <span class="tag">${a.c.map((c) => D.CAT[c]).join(", ")} · ${a.y}</span>
+      <h1>${D.esc(a.t)}</h1>
+      ${n.about ? `<p class="lede">${D.esc(n.about)}</p>` : ""}
+      <div class="btns">${D.spotify(a)}<a class="btn" href="${a.o}" target="_blank" rel="noopener">Official page</a><a class="btn" href="https://www.discogs.com/search/?q=${encodeURIComponent("Bob Dylan " + a.t)}&type=master" target="_blank" rel="noopener">Sleeves on Discogs</a></div>
+      ${spid ? D.player(spk, spid, a.spx ? a.t : (a.relt || "Related edition")) : ""}
+    </div>
+  </section>
+
+  <div class="agrid">
+    <div class="col">
+      ${facts.length ? `<section class="sheet"><h2>The record</h2><dl class="facts">${facts.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl></section>` : ""}
+      ${n.cover ? `<section class="sheet"><h2>The cover</h2><p>${D.esc(n.cover)}</p><p class="small muted" style="margin:0">Inner sleeves, back covers and other editions: see the <a href="https://www.discogs.com/search/?q=${encodeURIComponent("Bob Dylan " + a.t)}&type=master" target="_blank" rel="noopener">Discogs listing</a>.</p></section>` : ""}
+      ${n.influence && n.influence.length ? `<section class="sheet"><h2>Influence and afterlife</h2><ul class="infl">${n.influence.map((x) => `<li>${D.esc(x)}</li>`).join("")}</ul></section>` : ""}
+      ${charts.length ? `<section class="sheet"><h2>Charts</h2><ul class="rows">${charts.map((c) => `<li><div class="r"><b>${D.esc(c.chart)}</b><span class="muted small">${c.year || ""}</span><span class="end big num">${D.esc(c.peak)}</span></div></li>`).join("")}</ul>
+        ${(d.certs || []).length ? `<h3>Certifications</h3><p class="small">${d.certs.map((c) => `${D.esc(c.region)}: ${D.esc(c.award)}`).join(" · ")}</p>` : ""}</section>` : (d.certs || []).length ? `<section class="sheet"><h2>Certifications</h2><p class="small">${d.certs.map((c) => `${D.esc(c.region)}: ${D.esc(c.award)}`).join(" · ")}</p></section>` : ""}
+    </div>
+    <div class="col">
+      <section class="sheet"><h2 class="row"><span>Tracks</span><span class="muted small" style="font-weight:400">${(d.tracks || []).length || ""}</span></h2>
+        ${tracksHtml || `<p class="empty">Track list not available yet.</p>`}
+        <p class="small muted" style="margin:12px 0 0">Lyrics open on bobdylan.com. Live counts come from setlists on record at setlist.fm.</p></section>
+      ${people ? `<section class="sheet"><h2>Who played</h2>${people}</section>` : ""}
+    </div>
+  </div>
+
+  <nav class="anav">${prev ? `<a href="/album/?a=${prev.s}">← ${D.esc(prev.t)} <span class="muted">${prev.y}</span></a>` : "<span></span>"}${next ? `<a href="/album/?a=${next.s}">${D.esc(next.t)} <span class="muted">${next.y}</span> →</a>` : ""}</nav>
+  <p class="small muted">Facts, musicians and charts from ${d.wiki ? `<a href="${d.wiki.url}" rel="noopener">Wikipedia</a> (CC BY-SA)` : ""}${d.wiki && d.mb ? " and " : ""}${d.mb ? `<a href="${d.mb.url}" rel="noopener">MusicBrainz</a>` : ""}; notes written for this site.</p>`;
+})();
+</script>
+</body>
+</html>

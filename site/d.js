@@ -151,7 +151,7 @@
       function add(group,title,detail,url,extra="",weight=0,image="") {
         rows.push({group,title,detail,url,weight,image,key:normalize(title),text:normalize([title,detail,extra].join(" "))});
       }
-      for(const a of albums) add("Albums",a.t,a.y+" · "+a.c.map(k=>D.CAT[k]).join(", "),"/albums/?a="+a.s,"",0,"/covers/"+a.s+".webp");
+      for(const a of albums) add("Albums",a.t,a.y+" · "+a.c.map(k=>D.CAT[k]).join(", "),"/album/?a="+a.s,"",0,"/covers/"+a.s+".webp");
       for(const s of songs) add("Songs",s.n,s.k+" times live"+(s.c?" · "+s.c+" cover":""),"/song/?s="+s.s,"",s.k);
       for(const b of books) add("Books",b.title,b.author,"/books/?q="+encodeURIComponent(b.title),[b.category,b.subtitle].filter(Boolean).join(" "));
       for(const a of artists) add("Artists",a.name,a.direction,"/influences/#artist-"+D.slug(a.name),a.note);
