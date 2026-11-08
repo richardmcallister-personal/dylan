@@ -59,3 +59,13 @@ python3 tools/build_setlists.py          # ~3 min, 209 pages through the Worker
 git add site/data && git commit … && git push
 ```
 Re-import the kit (after Richard adds covers): `python3 tools/import_kit.py <path-to-dylan-resource-kit>`.
+
+## 8 Nov 2026 — album pages
+
+- Album pages for all 82 albums (facts, musicians, studios, charts, certifications, cover story, influence,
+  tracks with live counts and official lyric links, Spotify album player, prev/next). Home hero: eye emblem on the
+  right, album carousel below. Spotify keys added by Richard; `/health` shows spotify ok, song players live.
+- Known gaps: no Wikipedia article for Live 1962–1966 or Through the Open Window (MusicBrainz track lists only,
+  first release's edition); several albums have no chart table in their article (Saved, Shot of Love, Oh Mercy,
+  Under the Red Sky, etc.); personnel missing for most compilations and some archive sets.
+- Re-run: `python3 tools/build_albums.py` (reads Wikipedia through bobdylan.app/api/wiki, cached in KV 7 days).

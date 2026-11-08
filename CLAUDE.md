@@ -77,3 +77,14 @@ Tokens: `--bg --paper --ink --muted --rule --red --red-ink --on-red --on-red-mut
 Footer (7 Nov): manutd.wiki's dark full-width band — `siteFooter()` in d.js (brand + Listen / Live / Archive /
 Official columns, no other-sites column), then `.fnotes` with the fan-site line, sources and the theme switch. Class is
 `footer.mu.full` (not `.big`, which is the large-figure style). Keep the fan-site line.
+
+## Album pages (8 Nov 2026)
+
+`/album/?a=<slug>` for all 82 albums. Data: `site/data/album/<slug>.json` (facts, personnel, tracks, charts,
+certifications) built by `tools/build_albums.py` from Wikipedia via the Worker route `/api/wiki?t=` (allow-listed to
+the titles in `tools/wiki_titles.json`; Wikipedia blocks the build container's shared IP) with MusicBrainz as fallback
+for track lists. Editorial text (about / cover / influence) is hand-written in `site/data/album_notes.json` —
+plain, factual, own words, never lyrics or long quotes. Track titles link to song pages (live counts) and to the
+official lyric page on bobdylan.com via `site/data/lyric_links.json` (titles → URLs only; no lyric text is stored).
+Inner sleeves and other artwork are linked out to Discogs, not hosted. The home hero's album strip is a scrolling
+carousel linking to album pages; the cover wall and search open album pages (`/albums/?a=` redirects).
