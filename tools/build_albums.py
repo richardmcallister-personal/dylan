@@ -140,7 +140,10 @@ def infobox(code):
 def ib(t, *names):
     for n in names:
         if t is not None and t.has(n):
-            raw = str(t.get(n).value)
+            raw = str(t.get(n).value).strip()
+            m = re.match(r"^\{\{\s*(?:flatlist|plainlist|flat list)\s*\|(.*)\}\}$", raw, re.S | re.I)
+            if m:
+                raw = m.group(1)
             if re.search(r"(^|\n)\s*\*", raw):
                 v = "; ".join(x for x in (plain(b) for b in re.split(r"(?:^|\n)\s*\*", raw)) if x)
             else:
