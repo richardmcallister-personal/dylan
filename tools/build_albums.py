@@ -57,7 +57,13 @@ def plain(x):
         n = str(t.name).strip().lower()
         try:
             if n in ("hlist", "flatlist", "plainlist", "ubl", "unbulleted list", "flat list"):
-                items = [plain(p.value) for p in t.params if not p.showkey]
+                items = []
+                for p in t.params:
+                    if p.showkey:
+                        continue
+                    raw = str(p.value)
+                    parts = re.split(r"\n\s*\*", "\n" + raw) if "*" in raw else [raw]
+                    items += [plain(x) for x in parts]
                 code.replace(t, "; ".join(i for i in items if i))
             elif n in ("start date", "start-date", "release date", "start date and age", "end date"):
                 v = [str(p.value).strip() for p in t.params if not p.showkey]
@@ -134,7 +140,11 @@ def infobox(code):
 def ib(t, *names):
     for n in names:
         if t is not None and t.has(n):
-            v = plain(t.get(n).value)
+            raw = str(t.get(n).value)
+            if re.search(r"(^|\n)\s*\*", raw):
+                v = "; ".join(x for x in (plain(b) for b in re.split(r"(?:^|\n)\s*\*", raw)) if x)
+            else:
+                v = plain(raw)
             if v:
                 return v
     return ""
