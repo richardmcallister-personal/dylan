@@ -6,6 +6,10 @@ const MBID = "72c536dc-7137-4477-a521-567eeb840fa8"; // Bob Dylan on MusicBrainz
 const SFM = "https://api.setlist.fm/rest/1.0";
 const UA = "bobdylan.app/1.0 (+https://github.com/richardmcallister-personal/dylan)";
 
+// Wikipedia articles the album builder may read (tools/build_albums.py). Allow-listed so this is not an open proxy.
+import WIKI_TITLES from "./tools/wiki_titles.json";
+const WIKI_OK = new Set(Object.values(WIKI_TITLES));
+
 const json = (data, status = 200, maxAge = 0) =>
   new Response(JSON.stringify(data), {
     status,
@@ -147,6 +151,24 @@ async function spotifyTrack(env, title) {
 async function api(url, env) {
   const p = url.pathname;
   try {
+    // Wikipedia wikitext for an allow-listed album article (builder use only). Cached 7 days.
+    if (p === "/api/wiki") {
+      const t = url.searchParams.get("t") || "";
+      if (!WIKI_OK.has(t)) return json({ error: "title not allowed" }, 403);
+      const key = "wiki:v1:" + t;
+      if (env.DYLAN_CACHE) {
+        const hit = await env.DYLAN_CACHE.get(key, "json");
+        if (hit) return json(hit, 200, 3600);
+      }
+      const api = `https://en.wikipedia.org/w/api.php?action=parse&format=json&formatversion=2&redirects=1&prop=wikitext|revid&page=${encodeURIComponent(t)}`;
+      const r = await fetch(api, { headers: { "user-agent": UA + " album-builder; contact via github", "api-user-agent": UA } });
+      if (!r.ok) return json({ error: "wikipedia " + r.status }, 502);
+      const d = await r.json();
+      if (!d.parse) return json({ error: (d.error && d.error.info) || "not found" }, 404);
+      const out = { title: d.parse.title, revid: d.parse.revid, wikitext: d.parse.wikitext };
+      if (env.DYLAN_CACHE) await env.DYLAN_CACHE.put(key, JSON.stringify(out), { expirationTtl: 86400 * 7 });
+      return json(out, 200, 3600);
+    }
     if (p === "/api/spotify") {
       const q = (url.searchParams.get("q") || "").slice(0, 120);
       if (!q) return json({ error: "q required" }, 400);
