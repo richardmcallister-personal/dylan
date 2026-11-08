@@ -106,11 +106,11 @@ h2.row a.tlink{font-size:14px}
 
 /* Hero: black card */
 .hero{background:var(--black);color:var(--on-black);border-radius:var(--radius);padding:28px 24px;margin-bottom:16px;overflow:hidden}
-.hero{display:grid;grid-template-columns:minmax(0,1fr) auto;column-gap:32px}
+.hero{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);column-gap:32px}
 .hero>*{grid-column:1}
-.hero .hero-emblem{grid-column:2;grid-row:1 / span 3;align-self:center;width:clamp(200px,24vw,280px);height:auto;border-radius:50%;box-shadow:0 0 0 1px var(--muted-on-black)}
+.hero .hero-emblem{grid-column:2;grid-row:1 / span 3;align-self:center;justify-self:center;width:clamp(200px,24vw,280px);height:auto;border-radius:50%;box-shadow:0 0 0 1px var(--muted-on-black)}
 .hero .strip{grid-column:1 / -1}
-@media (max-width:640px){.hero{column-gap:14px}.hero .hero-emblem{grid-row:1;align-self:start;width:72px}}
+@media (max-width:640px){.hero{grid-template-columns:minmax(0,1fr) auto;column-gap:14px}.hero .hero-emblem{grid-row:1;align-self:start;justify-self:end;width:72px}}
 .hero h1{max-width:20ch}
 .hero p{color:var(--muted-on-black);font-size:17px;max-width:56ch}
 .hero .stats{display:flex;flex-wrap:wrap;gap:22px;margin-top:14px}
