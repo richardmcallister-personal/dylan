@@ -1,0 +1,45 @@
+{
+ "song": "Every Grain of Sand",
+ "intro": "The closing song of Shot of Love, from the end of his gospel years. Forty years later it became the last song of every show.",
+ "lives": [
+  {
+   "d": "1980-09",
+   "kind": "Demo",
+   "title": "Demo with a barking dog",
+   "place": "Rundown Studios, Santa Monica",
+   "note": "A rough demo with piano and a dog barking in the background. Released on The Bootleg Series Vol. 1–3.",
+   "a": "the-bootleg-series-vol-1-3-rare-and-unreleased-1961-1991"
+  },
+  {
+   "d": "1981",
+   "kind": "Studio",
+   "title": "Shot of Love",
+   "place": "Clover Studios, Los Angeles",
+   "note": "Closes the album, with harmonica and backing vocals.",
+   "a": "shot-love"
+  },
+  {
+   "d": "1981-11-21",
+   "kind": "Live",
+   "title": "First performance",
+   "place": "Lakeland Civic Center, Lakeland",
+   "note": "Played on the last nights of the 1981 tour.",
+   "id": "63d75eef"
+  },
+  {
+   "d": "2021-11",
+   "kind": "Live",
+   "title": "The closing song",
+   "place": "Rough and Rowdy Ways tour",
+   "note": "Since the tour began in November 2021 it has ended nearly every show, Dylan at the piano, with a harmonica solo.",
+   "change": "New arrangement"
+  }
+ ],
+ "others": [
+  {
+   "who": "Emmylou Harris",
+   "y": 1995,
+   "note": "On Wrecking Ball."
+  }
+ ]
+}

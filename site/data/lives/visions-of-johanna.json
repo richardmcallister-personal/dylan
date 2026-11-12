@@ -1,0 +1,46 @@
+{
+ "song": "Visions of Johanna",
+ "intro": "One of the songs he wrote in late 1965, between the electric tours. He tried it first as a band song, then found the slow, drifting version in Nashville.",
+ "lives": [
+  {
+   "d": "1965-11-30",
+   "kind": "Outtake",
+   "title": "\"Freeze Out\" with the Hawks",
+   "place": "Columbia Studio A, New York",
+   "note": "Cut fast and edgy with the band he was touring with, under the working title Freeze Out. Released on No Direction Home and The Cutting Edge.",
+   "a": "bootleg-series-vol-7-no-direction-home"
+  },
+  {
+   "d": "1966-02-14",
+   "kind": "Studio",
+   "title": "The Nashville master",
+   "place": "Columbia Studio A, Nashville",
+   "note": "Slowed right down with Nashville session players and Al Kooper's organ. On Blonde on Blonde, June 1966.",
+   "a": "blonde-on-blonde",
+   "change": "New arrangement"
+  },
+  {
+   "d": "1966-05-17",
+   "kind": "Live",
+   "title": "Solo in 1966",
+   "place": "Free Trade Hall, Manchester",
+   "note": "Played alone with guitar and harmonica in the hushed first half of the 1966 shows. On The Bootleg Series Vol. 4.",
+   "a": "bootleg-series-vol-4-bob-dylan-live-1966",
+   "id": "13d6bd6d"
+  },
+  {
+   "d": "2012",
+   "kind": "Live",
+   "title": "Late revival",
+   "place": "Never Ending Tour",
+   "note": "Rarely played for decades, it came back often in 2012 and 2013."
+  }
+ ],
+ "others": [
+  {
+   "who": "Grateful Dead",
+   "y": 1986,
+   "note": "Took it into their own live sets from 1986."
+  }
+ ]
+}

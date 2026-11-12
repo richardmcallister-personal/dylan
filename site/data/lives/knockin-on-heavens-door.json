@@ -1,0 +1,52 @@
+{
+ "song": "Knockin' on Heaven's Door",
+ "intro": "Written for a death scene in Sam Peckinpah's western Pat Garrett and Billy the Kid, in which Dylan also acted. Two short verses that turned into one of his most recorded songs.",
+ "lives": [
+  {
+   "d": "1973-02",
+   "kind": "Film",
+   "title": "For the film",
+   "place": "Burbank Studios, California",
+   "note": "Recorded for the soundtrack to play under the death of a sheriff. Released on Pat Garrett & Billy the Kid in July 1973; the single reached number 12 in the US.",
+   "a": "pat-garrett-and-billy-the-kid"
+  },
+  {
+   "d": "1974-01",
+   "kind": "Live",
+   "title": "On tour with the Band",
+   "place": "The 1974 tour with the Band",
+   "note": "Added to the 1974 shows. The 1974 shows are not in this site's concert data yet.",
+   "a": "the-1974-live-recordings"
+  },
+  {
+   "d": "1975",
+   "kind": "Live",
+   "title": "Rolling Thunder",
+   "place": "Rolling Thunder Revue",
+   "note": "Part of the 1975 Rolling Thunder shows, sung with the whole troupe behind him.",
+   "a": "bob-dylan-the-rolling-thunder-revue-the-1975-live-recordings"
+  },
+  {
+   "d": "1978-03-01",
+   "kind": "Live",
+   "title": "Reggae",
+   "place": "Nippon Budokan, Tokyo",
+   "note": "Recast with a reggae lilt by the 1978 band. On Bob Dylan at Budokan.",
+   "a": "bob-dylan-at-budokan",
+   "change": "New arrangement",
+   "id": "4bd7c3fa"
+  }
+ ],
+ "others": [
+  {
+   "who": "Eric Clapton",
+   "y": 1975,
+   "note": "A reggae-flavoured single."
+  },
+  {
+   "who": "Guns N' Roses",
+   "y": 1991,
+   "note": "On Use Your Illusion II; a number two single in the UK."
+  }
+ ]
+}

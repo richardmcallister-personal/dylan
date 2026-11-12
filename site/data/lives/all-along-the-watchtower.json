@@ -1,0 +1,64 @@
+{
+ "song": "All Along the Watchtower",
+ "intro": "A short, spare song from John Wesley Harding that Jimi Hendrix turned into something huge. Dylan has said that when he plays it now, he is following Hendrix's lead. It is his most-played song on stage.",
+ "lives": [
+  {
+   "d": "1967-11-06",
+   "kind": "Studio",
+   "title": "Three men in Nashville",
+   "place": "Columbia Studio A, Nashville",
+   "note": "Dylan on guitar and harmonica with Charlie McCoy on bass and Kenny Buttrey on drums. Under three minutes. On John Wesley Harding, December 1967.",
+   "a": "john-wesley-harding"
+  },
+  {
+   "d": "1968-01",
+   "kind": "Cover",
+   "title": "Jimi Hendrix",
+   "place": "Olympic Studios, London",
+   "note": "Recorded within weeks of Dylan's album coming out, layered with electric guitar solos. On Electric Ladyland; the single went top five in the UK.",
+   "change": "New arrangement"
+  },
+  {
+   "d": "1974-01",
+   "kind": "Live",
+   "title": "First on stage",
+   "place": "The 1974 tour with the Band",
+   "note": "Played loud and fast with the Band, now built on Hendrix's model. On Before the Flood. The 1974 shows are not in this site's concert data yet.",
+   "a": "before-the-flood",
+   "change": "New arrangement"
+  },
+  {
+   "d": "1978-02-28",
+   "kind": "Live",
+   "title": "Big band",
+   "place": "Nippon Budokan, Tokyo",
+   "note": "Part of the 1978 big-band show with horns and backing singers. On Bob Dylan at Budokan.",
+   "a": "bob-dylan-at-budokan",
+   "id": "43d7c3fb"
+  },
+  {
+   "d": "1992",
+   "kind": "Live",
+   "title": "The closer",
+   "place": "Never Ending Tour",
+   "note": "From the early 1990s it became a fixture near the end of the show, often the final song, for more than twenty years."
+  }
+ ],
+ "others": [
+  {
+   "who": "Jimi Hendrix Experience",
+   "y": 1968,
+   "note": "UK top five; the version most people know."
+  },
+  {
+   "who": "U2",
+   "y": 1988,
+   "note": "A live version on Rattle and Hum."
+  },
+  {
+   "who": "Neil Young",
+   "y": 1992,
+   "note": "At the 30th anniversary concert in Madison Square Garden."
+  }
+ ]
+}

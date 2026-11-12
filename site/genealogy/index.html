@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Song genealogy · Bob Dylan</title>
+<meta name="description" content="Trace Bob Dylan songs from their roots and first performance through new arrangements, rewritten words, covers and late revivals.">
+<link rel="preload" href="/fonts/anton-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/d.css">
+<link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="apple-touch-icon" href="/assets/dylan-eye-180.png">
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#b3261e">
+<script>try{var t=localStorage.getItem("dn_theme");if(t)document.documentElement.setAttribute("data-theme",t)}catch(e){}</script>
+<script src="/d.js"></script>
+</head>
+<body>
+<main id="main" class="wrap"><div class="loading">Loading…</div></main>
+<script>
+D.shell("genealogy");
+(async () => {
+  const M = document.getElementById("main");
+  const [idx, songs] = await Promise.all([D.get("/data/lives/index.json"), D.get("/data/songs.json")]);
+  const bySlug = Object.fromEntries(songs.map((s) => [s.s, s]));
+  const lives = await Promise.all(idx.map((s) => D.get(`/data/lives/${s}.json`).then((g) => ({ ...g, s })).catch(() => null)));
+  const traced = lives.filter((g) => g && bySlug[g.s]);
+  const thisYear = new Date().getFullYear();
+
+  // Comebacks across every song: the longest run of years without a performance, then a return.
+  const MISSING = new Set([1974, 1986, 1987]);
+  const comebacks = songs.filter((s) => s.k >= 20).map((s) => {
+    const ys = Object.keys(s.y).map(Number).sort((a, b) => a - b);
+    let best = null;
+    for (let i = 1; i < ys.length; i++) {
+      const gap = ys[i] - ys[i - 1];
+      if (!best || gap > best.gap) best = { gap, from: ys[i - 1], to: ys[i], soft: [...MISSING].some((m) => m > ys[i - 1] && m < ys[i]) };
+    }
+    return best && { s, ...best };
+  }).filter((c) => c && c.gap >= 10).sort((a, b) => b.gap - a.gap || b.s.k - a.s.k).slice(0, 20);
+
+  const span = (g) => {
+    const first = g.lives[0] ? g.lives[0].d.slice(0, 4) : bySlug[g.s].f[0].slice(0, 4);
+    return `${Math.min(+first, +bySlug[g.s].f[0].slice(0, 4))}–${bySlug[g.s].l[0].slice(0, 4)}`;
+  };
+  const changes = (g) => g.lives.filter((l) => l.change).length;
+
+  M.innerHTML = `
+  <div class="head"><h1>Song genealogy</h1>
+    <p>How a song changes over a lifetime: where the tune came from, the studio takes, the nights it was rearranged or rewritten, the covers that changed how people heard it, and the comebacks after years away. No lyrics here — follow the links to bobdylan.com for the words.</p></div>
+  <div class="tiles">
+    <div class="tile"><b class="num">${traced.length}</b><span>songs traced in full</span></div>
+    <div class="tile"><b class="num">${traced.reduce((n, g) => n + g.lives.length, 0)}</b><span>versions described</span></div>
+    <div class="tile"><b class="num">${traced.reduce((n, g) => n + changes(g), 0)}</b><span>new arrangements or words</span></div>
+    <div class="tile"><b class="num">${songs.length}</b><span>songs with a stage history</span></div>
+  </div>
+  <section class="sheet"><h2>Traced songs</h2>
+    <ul class="gene">${traced.map((g) => {
+      const s = bySlug[g.s], ys = Object.keys(s.y).map(Number);
+      return `<li><a href="/song/?s=${g.s}">
+        <span class="gt"><b>${D.esc(g.song)}</b><small>${span(g)} · ${s.k} times live · ${g.lives.length} versions${changes(g) ? ` · ${changes(g)} reworked` : ""}${g.others && g.others.length ? ` · ${g.others.length} covers` : ""}</small></span>
+        <span class="gi">${D.esc(g.intro)}</span>
+        <div class="gb">${D.bars(s.y, 1960, thisYear)}</div></a></li>`;
+    }).join("")}</ul></section>
+  <section class="sheet"><h2>Biggest comebacks</h2>
+    <p class="small muted" style="margin:0 0 6px">Songs that went ten years or more without a performance, then came back. Every song page shows its own comebacks.</p>
+    <ul class="rows">${comebacks.map((c) => `<li><a class="r" href="/song/?s=${c.s.s}"><b>${D.esc(c.s.n)}</b><span class="end num big">${c.gap}<small class="muted"> yrs</small></span>
+      <span class="muted small">Last played ${c.from}, back in ${c.to}${c.soft ? " · gap includes years missing from the data" : ""}</span></a></li>`).join("")}</ul></section>
+  <p class="small muted">Written for this site from the record; first shows, comebacks and counts from setlist.fm. The 1974 tour and most of 1986–87 are not in the setlist data yet.</p>`;
+})();
+</script>
+</body>
+</html>

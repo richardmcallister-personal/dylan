@@ -1,0 +1,88 @@
+{
+ "song": "Blowin' in the Wind",
+ "intro": "Written in a few hours in April 1962 and sung at Gerde's Folk City the same month, before he had even finished it to his liking. Within a year it was an anthem — first in other people's voices.",
+ "lives": [
+  {
+   "d": "1962",
+   "kind": "Roots",
+   "title": "An old spiritual underneath",
+   "place": "Greenwich Village",
+   "note": "The tune draws on \"No More Auction Block\", a spiritual sung by people escaping slavery. His own Gaslight Cafe performance of it from 1962 later came out on The Bootleg Series Vol. 1–3.",
+   "a": "the-bootleg-series-vol-1-3-rare-and-unreleased-1961-1991"
+  },
+  {
+   "d": "1962-04-16",
+   "kind": "Live",
+   "title": "First time out",
+   "place": "Gerde's Folk City, New York",
+   "note": "The earliest performance on record, in an early form of the song.",
+   "id": "33d6e4fd"
+  },
+  {
+   "d": "1962-07-09",
+   "kind": "Studio",
+   "title": "The Freewheelin' recording",
+   "place": "Columbia Studio A, New York",
+   "note": "Just voice, guitar and harmonica. Released in May 1963 as the opening track of The Freewheelin' Bob Dylan.",
+   "a": "freewheelin-bob-dylan"
+  },
+  {
+   "d": "1963-06",
+   "kind": "Cover",
+   "title": "Peter, Paul and Mary",
+   "place": "Single",
+   "note": "Their harmony version reached number two in the US in summer 1963 and made the song known well beyond the folk clubs."
+  },
+  {
+   "d": "1963-07-26",
+   "kind": "Live",
+   "title": "Newport finale",
+   "place": "Freebody Park, Newport",
+   "note": "The festival closed with Dylan, Joan Baez, Peter, Paul and Mary, Pete Seeger and the Freedom Singers singing it together, arm in arm.",
+   "id": "73d62a01"
+  },
+  {
+   "d": "1978-02-28",
+   "kind": "Live",
+   "title": "Slow and gospel-tinged",
+   "place": "Nippon Budokan, Tokyo",
+   "note": "Re-arranged for the 1978 big band with backing singers, slowed down and almost hymn-like. On Bob Dylan at Budokan.",
+   "a": "bob-dylan-at-budokan",
+   "change": "New arrangement",
+   "id": "43d7c3fb"
+  },
+  {
+   "d": "1985-07-13",
+   "kind": "Live",
+   "title": "Live Aid",
+   "place": "John F. Kennedy Stadium, Philadelphia",
+   "note": "The last song of his short acoustic set with Keith Richards and Ronnie Wood, seen around the world.",
+   "id": "3d599bb"
+  },
+  {
+   "d": "2012",
+   "kind": "Live",
+   "title": "The late encore",
+   "place": "Never Ending Tour",
+   "note": "From 2012 to 2019 it was a regular encore, rearranged several times and often led from the piano.",
+   "change": "New arrangement"
+  }
+ ],
+ "others": [
+  {
+   "who": "Peter, Paul and Mary",
+   "y": 1963,
+   "note": "Number two in the US."
+  },
+  {
+   "who": "Sam Cooke",
+   "y": 1964,
+   "note": "Didn't record a hit version, but said the song spurred him to write \"A Change Is Gonna Come\"."
+  },
+  {
+   "who": "Stevie Wonder",
+   "y": 1966,
+   "note": "A soul version that went top ten in the US."
+  }
+ ]
+}

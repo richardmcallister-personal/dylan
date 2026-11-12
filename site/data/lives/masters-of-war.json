@@ -1,0 +1,45 @@
+{
+ "song": "Masters of War",
+ "intro": "A protest song written in winter 1962–63, set to an old tune. He has kept it in the set for six decades, often in arrangements that sound nothing like the original.",
+ "lives": [
+  {
+   "d": "1962",
+   "kind": "Roots",
+   "title": "Nottamun Town",
+   "place": "Kentucky tradition",
+   "note": "The melody comes from \"Nottamun Town\" as arranged by the Kentucky folk singer Jean Ritchie. His lawyers later settled with her."
+  },
+  {
+   "d": "1963-04-12",
+   "kind": "Live",
+   "title": "Town Hall",
+   "place": "The Town Hall, New York",
+   "note": "One of the early concert performances, at his first major New York hall show.",
+   "id": "6bd6e286"
+  },
+  {
+   "d": "1963-04-24",
+   "kind": "Studio",
+   "title": "Freewheelin'",
+   "place": "Columbia Studio A, New York",
+   "note": "Voice and guitar, harsh and steady. On The Freewheelin' Bob Dylan.",
+   "a": "freewheelin-bob-dylan"
+  },
+  {
+   "d": "1991-02-20",
+   "kind": "Broadcast",
+   "title": "The Grammys, during the Gulf War",
+   "place": "Radio City Music Hall, New York",
+   "note": "Accepting a lifetime achievement award, he played it fast and loud with a band, the words hard to make out — a choice many saw as a comment on the war.",
+   "change": "New arrangement",
+   "id": "3bf33420"
+  }
+ ],
+ "others": [
+  {
+   "who": "Eddie Vedder and Mike McCready",
+   "y": 1992,
+   "note": "At the 30th anniversary concert in Madison Square Garden."
+  }
+ ]
+}

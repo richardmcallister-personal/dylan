@@ -1,0 +1,46 @@
+{
+ "song": "Simple Twist of Fate",
+ "intro": "A song from the New York sessions for Blood on the Tracks that survived the re-recording in Minneapolis, so the album keeps its first, quiet version.",
+ "lives": [
+  {
+   "d": "1974-09",
+   "kind": "Studio",
+   "title": "New York take",
+   "place": "A&R Studios, New York",
+   "note": "Acoustic guitar, bass and harmonica. This take stayed on Blood on the Tracks; the full session is on More Blood, More Tracks.",
+   "a": "blood-tracks"
+  },
+  {
+   "d": "1975-09-10",
+   "kind": "Broadcast",
+   "title": "First performance, on TV",
+   "place": "PBS Soundstage, Chicago",
+   "note": "Played for a television tribute to John Hammond, the producer who signed him — the first time it was performed live.",
+   "id": "73407685"
+  },
+  {
+   "d": "1978-02-28",
+   "kind": "Live",
+   "title": "Big band",
+   "place": "Nippon Budokan, Tokyo",
+   "note": "Given the full 1978 band treatment. On Bob Dylan at Budokan.",
+   "a": "bob-dylan-at-budokan",
+   "change": "New arrangement",
+   "id": "43d7c3fb"
+  },
+  {
+   "d": "2018",
+   "kind": "Live",
+   "title": "Back in nearly every show",
+   "place": "Never Ending Tour",
+   "note": "After years as an occasional song it was played almost nightly in 2018 and 2019."
+  }
+ ],
+ "others": [
+  {
+   "who": "Joan Baez",
+   "y": 1975,
+   "note": "On Diamonds & Rust, the same year as Dylan's album."
+  }
+ ]
+}

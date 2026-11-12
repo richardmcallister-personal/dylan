@@ -1,0 +1,54 @@
+{
+ "song": "Desolation Row",
+ "intro": "The eleven-minute closer of Highway 61 Revisited, a long parade of characters from history and fiction. The only acoustic song on an electric album.",
+ "lives": [
+  {
+   "d": "1965-07-29",
+   "kind": "Outtake",
+   "title": "Electric first",
+   "place": "Columbia Studio A, New York",
+   "note": "Tried with a band first. The electric take came out on The Cutting Edge.",
+   "a": "the-bootleg-series-vol-12-the-best-of-the-cutting-edge-1965-1966"
+  },
+  {
+   "d": "1965-08-04",
+   "kind": "Studio",
+   "title": "Acoustic master",
+   "place": "Columbia Studio A, New York",
+   "note": "Re-cut acoustic with Charlie McCoy's Spanish-flavoured guitar fills. Closes Highway 61 Revisited.",
+   "a": "highway-61-revisited",
+   "change": "New arrangement"
+  },
+  {
+   "d": "1965-08-28",
+   "kind": "Live",
+   "title": "First performance",
+   "place": "Forest Hills Tennis Stadium, Queens",
+   "note": "Played in the solo acoustic half of the show, two days before the album came out.",
+   "id": "23d7b09f"
+  },
+  {
+   "d": "1994-11-18",
+   "kind": "Live",
+   "title": "Unplugged",
+   "place": "Sony Music Studios, New York",
+   "note": "Played with a small acoustic band for MTV, released on MTV Unplugged.",
+   "a": "mtv-unplugged",
+   "id": "13d509a5"
+  },
+  {
+   "d": "2017",
+   "kind": "Live",
+   "title": "Nightly again",
+   "place": "Never Ending Tour",
+   "note": "Back in almost every show of 2017, and again on the 2025 tour."
+  }
+ ],
+ "others": [
+  {
+   "who": "My Morning Jacket",
+   "y": 2009,
+   "note": "For the film Watchmen."
+  }
+ ]
+}

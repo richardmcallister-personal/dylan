@@ -1,0 +1,56 @@
+{
+ "song": "I Shall Be Released",
+ "intro": "Written in the Basement Tapes summer of 1967, when Dylan and the Band were making music for fun in a house near Woodstock. The Band's version came first; Dylan's own studio take waited until 1971.",
+ "lives": [
+  {
+   "d": "1967",
+   "kind": "Demo",
+   "title": "The basement",
+   "place": "Big Pink, West Saugerties",
+   "note": "Recorded with the Band on a home tape machine. The take first came out officially in 1991, and in full on The Basement Tapes Complete.",
+   "a": "bootleg-series-vol-11-basement-tapes-complete"
+  },
+  {
+   "d": "1968-07",
+   "kind": "Cover",
+   "title": "The Band",
+   "place": "Music from Big Pink",
+   "note": "Closed their first album, with Richard Manuel singing high and fragile."
+  },
+  {
+   "d": "1971-09",
+   "kind": "Studio",
+   "title": "Dylan's own release",
+   "place": "New York",
+   "note": "A new recording with Happy Traum on second guitar, made for Bob Dylan's Greatest Hits Vol. II.",
+   "a": "bob-dylans-greatest-hits-volume-ii"
+  },
+  {
+   "d": "1976-11-25",
+   "kind": "Live",
+   "title": "The Last Waltz",
+   "place": "Winterland, San Francisco",
+   "note": "The Band's farewell concert ended with everyone on stage singing it together."
+  },
+  {
+   "d": "2026-06-09",
+   "kind": "Live",
+   "title": "Back after 18 years",
+   "place": "Cuthbert Amphitheater, Eugene",
+   "note": "Played for the first time since June 2008, as the last song of the night, and kept in the set through 2026.",
+   "id": "1349694d"
+  }
+ ],
+ "others": [
+  {
+   "who": "The Band",
+   "y": 1968,
+   "note": "On Music from Big Pink."
+  },
+  {
+   "who": "Nina Simone",
+   "y": 1969,
+   "note": "On To Love Somebody."
+  }
+ ]
+}

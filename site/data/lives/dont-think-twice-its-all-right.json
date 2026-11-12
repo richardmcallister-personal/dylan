@@ -1,0 +1,50 @@
+{
+ "song": "Don't Think Twice, It's All Right",
+ "intro": "A farewell song from 1962, built on a tune he picked up from his friend Paul Clayton. It has stayed in the set, in one form or another, through almost every era.",
+ "lives": [
+  {
+   "d": "1962",
+   "kind": "Roots",
+   "title": "Borrowed bones",
+   "place": "Greenwich Village",
+   "note": "The melody and some phrasing come from \"Who's Gonna Buy You Ribbons When I'm Gone\", which Paul Clayton had adapted from an older song."
+  },
+  {
+   "d": "1962-11-14",
+   "kind": "Studio",
+   "title": "Freewheelin'",
+   "place": "Columbia Studio A, New York",
+   "note": "Fast finger-picked guitar and harmonica. On The Freewheelin' Bob Dylan.",
+   "a": "freewheelin-bob-dylan"
+  },
+  {
+   "d": "1963",
+   "kind": "Cover",
+   "title": "Peter, Paul and Mary",
+   "place": "Single",
+   "note": "A top ten hit in the US in 1963, following their Blowin' in the Wind."
+  },
+  {
+   "d": "1978-02-28",
+   "kind": "Live",
+   "title": "Reggae",
+   "place": "Nippon Budokan, Tokyo",
+   "note": "Turned into a reggae song for the 1978 tour. On Bob Dylan at Budokan.",
+   "a": "bob-dylan-at-budokan",
+   "change": "New arrangement",
+   "id": "43d7c3fb"
+  }
+ ],
+ "others": [
+  {
+   "who": "Peter, Paul and Mary",
+   "y": 1963,
+   "note": "US top ten."
+  },
+  {
+   "who": "Johnny Cash",
+   "y": 1965,
+   "note": "On Orange Blossom Special."
+  }
+ ]
+}

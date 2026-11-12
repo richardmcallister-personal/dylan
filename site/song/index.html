@@ -53,19 +53,39 @@ D.shell("songs");
     </div>`;
 
   h += `<div id="listen"></div>`;
+  // Stage history from the setlists: first show, comebacks after 4+ years away, latest show.
+  const ps = perf.p.slice().sort((a, b) => (a[0] < b[0] ? -1 : 1));
+  const yrs = (a, b) => (new Date(b) - new Date(a)) / 31557600000;
+  const MISSING = (a, b) => (a < "1975" && b > "1974") || (a < "1988" && b > "1985");
+  const stage = [];
+  if (ps.length) stage.push({ d: ps[0][0], kind: "Live", title: "First performance on record", place: `${ps[0][2]}, ${ps[0][3]}`, id: ps[0][1], auto: 1 });
+  for (let i = 1; i < ps.length; i++) {
+    const gap = yrs(ps[i - 1][0], ps[i][0]);
+    if (gap >= 4) stage.push({ d: ps[i][0], kind: "Revival", title: `Back after ${Math.floor(gap)} years`, place: `${ps[i][2]}, ${ps[i][3]}`, id: ps[i][1], auto: 1,
+      note: `Not played since ${D.date(ps[i - 1][0])}.${MISSING(ps[i - 1][0], ps[i][0]) ? " The gap spans 1974 or 1986–87, which this site's setlists don't cover yet, so it may be shorter." : ""}` });
+  }
+  if (ps.length > 1) stage.push({ d: ps[ps.length - 1][0], kind: "Live", title: s.l[0] >= String(thisYear - 1) ? "Latest performance" : "Last performance on record", place: `${ps[ps.length - 1][2]}, ${ps[ps.length - 1][3]}`, id: ps[ps.length - 1][1], auto: 1 });
+  const whenOf = (d) => d.length === 4 ? d : d.length === 7 ? D.date(d + "-01").replace(/^\S+ 1 |^1 /, "") : D.date(d);
+  const lifeRow = (l) => {
+    const a = l.a && byS[l.a];
+    const links = [a ? `<a href="/album/?a=${a.s}">${D.esc(a.t)}</a>` : "", a ? D.spotify(a).replace('class="btn pri"', 'class="btn"') : "", l.id ? `<a href="/concert/?id=${l.id}">Setlist</a>` : ""].filter(Boolean);
+    return `<li class="life k-${l.kind.toLowerCase()}">${a ? `<div class="thumb">${D.cover(a, 72)}</div>` : `<div class="dot"><i></i></div>`}<div>
+      <div class="when"><span class="tag">${D.esc(l.kind)}</span>${l.change ? ` <span class="tag chg">${D.esc(l.change)}</span>` : ""} ${whenOf(l.d)} · ${D.esc(l.place)}</div>
+      <h3>${D.esc(l.title)}</h3>${l.note ? `<p style="margin:2px 0 6px">${D.esc(l.note)}</p>` : ""}
+      ${links.length ? `<div class="btns" style="margin-top:4px;align-items:center">${links.join(" ")}</div>` : ""}</div></li>`;
+  };
   if (lives) {
-    h += `<section class="sheet"><span class="tag">One song, many lives</span><h2 style="margin-top:8px">Through the years</h2><ol class="lives">` +
-      lives.lives.map((l) => {
-        const a = l.a && byS[l.a];
-        const when = l.d.length === 7 ? D.date(l.d + "-01").replace(/^1 /, "") : D.date(l.d);
-        const links = [a ? `<a href="${a.o}" target="_blank" rel="noopener">${D.esc(a.t)}</a>` : "", a ? D.spotify(a).replace('class="btn pri"', 'class="btn"') : "", l.id ? `<a href="/concert/?id=${l.id}">Setlist</a>` : ""].filter(Boolean);
-        return `<li class="life">${a ? `<div class="thumb">${D.cover(a, 72)}</div>` : `<div class="dot"><i></i></div>`}<div>
-          <div class="when"><span class="tag">${D.esc(l.kind)}</span> ${when} · ${D.esc(l.place)}</div>
-          <h3>${D.esc(l.title)}</h3><p style="margin:2px 0 6px">${D.esc(l.note)}</p>
-          <div class="btns" style="margin-top:4px;align-items:center">${links.join(" ")}</div></div></li>`;
-      }).join("") + `</ol>` +
-      (lives.others && lives.others.length ? `<h3 style="margin-top:16px">Others who made it their own</h3><ul class="rows">${lives.others.map((o) => `<li><div class="r"><b>${D.esc(o.who)}</b><span class="muted small">${D.esc(o.note)}</span></div></li>`).join("")}</ul>` : "") +
-      `</section>`;
+    const ids = new Set(lives.lives.map((l) => l.id).filter(Boolean)), days = new Set(lives.lives.map((l) => l.d));
+    const merged = lives.lives.concat(stage.filter((x) => !ids.has(x.id) && !days.has(x.d) && (x.kind === "Revival" || x === stage[stage.length - 1] || !lives.lives.some((l) => l.kind === "Live" && l.d <= x.d))))
+      .sort((a, b) => (a.d < b.d ? -1 : a.d > b.d ? 1 : 0));
+    h += `<section class="sheet"><span class="tag">Song genealogy</span><h2 style="margin-top:8px">From first take to latest revival</h2>
+      <p class="small muted" style="margin:0 0 4px">Roots, recordings, rewrites and covers are written for this site; first shows, comebacks and the latest show come from the setlists.</p><ol class="lives">` +
+      merged.map(lifeRow).join("") + `</ol>` +
+      (lives.others && lives.others.length ? `<h3 style="margin-top:16px">Others who made it their own</h3><ul class="rows">${lives.others.map((o) => `<li><div class="r"><b>${D.esc(o.who)}</b><span class="end muted small num">${o.y || ""}</span><span class="muted small" style="grid-column:1/-1">${D.esc(o.note)}</span></div></li>`).join("")}</ul>` : "") +
+      `<p class="small" style="margin:14px 0 0"><a href="/genealogy/">More song genealogies →</a></p></section>`;
+  } else if (stage.length > 1) {
+    h += `<section class="sheet"><h2>Life on stage</h2><ol class="lives">${stage.map(lifeRow).join("")}</ol>
+      <p class="small muted" style="margin:8px 0 0">From the setlists. Comebacks are returns after four or more years away. <a href="/genealogy/">Song genealogies →</a></p></section>`;
   }
 
   h += `<section class="sheet"><h2>Live, year by year</h2>${D.bars(s.y, Math.min(...years), Math.max(thisYear, ...years), (y, n) => n && n === peak[1])}

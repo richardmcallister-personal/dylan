@@ -1,0 +1,60 @@
+{
+ "song": "Make You Feel My Love",
+ "intro": "A plain love song from Time Out of Mind that other singers took up almost at once. Billy Joel released it before Dylan's own album came out.",
+ "lives": [
+  {
+   "d": "1997-01",
+   "kind": "Studio",
+   "title": "Time Out of Mind",
+   "place": "Criteria Studios, Miami",
+   "note": "Recorded with Daniel Lanois producing, Dylan on piano. On Time Out of Mind, September 1997.",
+   "a": "time-out-of-mind"
+  },
+  {
+   "d": "1997-08",
+   "kind": "Cover",
+   "title": "Billy Joel goes first",
+   "place": "Greatest Hits Volume III",
+   "note": "Released as \"To Make You Feel My Love\" a month before Dylan's album."
+  },
+  {
+   "d": "1997-11-02",
+   "kind": "Live",
+   "title": "First performance",
+   "place": "Township Auditorium, Columbia",
+   "note": "Added to the shows within weeks of the album.",
+   "id": "33d55479"
+  },
+  {
+   "d": "1998",
+   "kind": "Cover",
+   "title": "Garth Brooks",
+   "place": "Hope Floats soundtrack",
+   "note": "A number one on the US country chart."
+  },
+  {
+   "d": "2008",
+   "kind": "Cover",
+   "title": "Adele",
+   "place": "19",
+   "note": "Her piano version became a UK top five hit in 2010."
+  }
+ ],
+ "others": [
+  {
+   "who": "Billy Joel",
+   "y": 1997,
+   "note": "First to release it."
+  },
+  {
+   "who": "Garth Brooks",
+   "y": 1998,
+   "note": "US country number one."
+  },
+  {
+   "who": "Adele",
+   "y": 2008,
+   "note": "UK number four in 2010."
+  }
+ ]
+}

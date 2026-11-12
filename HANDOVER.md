@@ -76,3 +76,12 @@ Re-import the kit (after Richard adds covers): `python3 tools/import_kit.py <pat
   238 photos matched to one setlist.fm show (link to its setlist); 54 to a city with several shows that year (link
   to that year); 8 unmatched (mostly years missing from setlist.fm, e.g. 1974/1986–87).
 - No photographer credits yet — the photos came without metadata. Add a credits field to gallery.json when known.
+
+## 12 Nov 2026 — song genealogy
+
+- `/genealogy/` (masthead, footer, home feature). 15 songs traced: Blowin' in the Wind, Don't Think Twice, Masters of
+  War, Girl from the North Country, Mr. Tambourine Man, Like a Rolling Stone, Desolation Row, Visions of Johanna,
+  Simple Twist of Fate, I Shall Be Released, Knockin' on Heaven's Door, Tangled Up in Blue, All Along the Watchtower,
+  Every Grain of Sand, Make You Feel My Love. Every song page now has a computed stage history.
+- Next candidates: It's Alright Ma, Just Like a Woman, Ballad of a Thin Man, Highway 61 Revisited, Shelter from the
+  Storm, Gotta Serve Somebody, Things Have Changed, Forever Young.

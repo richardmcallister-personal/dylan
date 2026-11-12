@@ -1,0 +1,77 @@
+{
+ "song": "Mr. Tambourine Man",
+ "intro": "Begun after a trip to Mardi Gras in New Orleans in February 1964 and finished that spring. Dylan sang it for a year before releasing it — by which time the Byrds were about to turn it into a number one.",
+ "lives": [
+  {
+   "d": "1964-05-17",
+   "kind": "Live",
+   "title": "First performance",
+   "place": "Royal Festival Hall, London",
+   "note": "Probably the live debut, months before any recording was released.",
+   "id": "6bd7ba2a"
+  },
+  {
+   "d": "1964-06-09",
+   "kind": "Outtake",
+   "title": "With Ramblin' Jack Elliott",
+   "place": "Columbia Studio A, New York",
+   "note": "Tried during the Another Side sessions with Elliott singing harmony. Left off the album, it surfaced in 2005 on No Direction Home.",
+   "a": "bootleg-series-vol-7-no-direction-home"
+  },
+  {
+   "d": "1964-07-26",
+   "kind": "Live",
+   "title": "Newport 1964",
+   "place": "Freebody Park, Newport",
+   "note": "Sung solo at the festival a year before the electric set; the crowd was hearing it for the first time.",
+   "id": "7bd7ba28"
+  },
+  {
+   "d": "1965-01-15",
+   "kind": "Studio",
+   "title": "The master take",
+   "place": "Columbia Studio A, New York",
+   "note": "Acoustic guitar and harmonica with Bruce Langhorne's electric guitar weaving around them. On Bringing It All Back Home, March 1965.",
+   "a": "bringing-it-all-back-home"
+  },
+  {
+   "d": "1965-04-12",
+   "kind": "Cover",
+   "title": "The Byrds",
+   "place": "Single",
+   "note": "One of his four verses, a jangling twelve-string guitar and close harmonies. Number one in the US and UK, and often called the start of folk rock.",
+   "change": "Both"
+  },
+  {
+   "d": "1966-05-17",
+   "kind": "Live",
+   "title": "End of the acoustic half",
+   "place": "Free Trade Hall, Manchester",
+   "note": "On the 1966 world tour it closed the solo acoustic set every night, stretched out with long harmonica passages. On The Bootleg Series Vol. 4.",
+   "a": "bootleg-series-vol-4-bob-dylan-live-1966",
+   "id": "13d6bd6d"
+  },
+  {
+   "d": "1978-02-28",
+   "kind": "Live",
+   "title": "With flute",
+   "place": "Nippon Budokan, Tokyo",
+   "note": "The 1978 band gave it a gentle arrangement with flute. On Bob Dylan at Budokan.",
+   "a": "bob-dylan-at-budokan",
+   "change": "New arrangement",
+   "id": "43d7c3fb"
+  }
+ ],
+ "others": [
+  {
+   "who": "The Byrds",
+   "y": 1965,
+   "note": "Number one on both sides of the Atlantic."
+  },
+  {
+   "who": "Judy Collins",
+   "y": 1965,
+   "note": "An early folk cover on her Fifth Album."
+  }
+ ]
+}

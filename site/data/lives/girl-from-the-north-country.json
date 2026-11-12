@@ -1,0 +1,44 @@
+{
+ "song": "Girl From the North Country",
+ "intro": "Written after his first trip to England in the winter of 1962–63. The melody and some of the shape come from the English folk song \"Scarborough Fair\", which he learned from Martin Carthy in London.",
+ "lives": [
+  {
+   "d": "1962-12",
+   "kind": "Roots",
+   "title": "Learning from Martin Carthy",
+   "place": "London",
+   "note": "Carthy taught him his arrangement of Scarborough Fair; Dylan built a new song on its frame."
+  },
+  {
+   "d": "1963-04-23",
+   "kind": "Studio",
+   "title": "Freewheelin'",
+   "place": "Columbia Studio A, New York",
+   "note": "Voice, finger-picked guitar and harmonica. On The Freewheelin' Bob Dylan.",
+   "a": "freewheelin-bob-dylan"
+  },
+  {
+   "d": "1969-02-18",
+   "kind": "Studio",
+   "title": "Duet with Johnny Cash",
+   "place": "Columbia Studio A, Nashville",
+   "note": "Sung together in Nashville and used to open Nashville Skyline, Dylan in his new, smoother voice.",
+   "a": "nashville-skyline",
+   "change": "New arrangement"
+  },
+  {
+   "d": "2019",
+   "kind": "Live",
+   "title": "Back in the set",
+   "place": "Never Ending Tour",
+   "note": "Played in most shows of 2019, Dylan at the piano."
+  }
+ ],
+ "others": [
+  {
+   "who": "Conor McPherson",
+   "y": 2017,
+   "note": "A stage musical named after the song, built on Dylan's catalogue, opened at the Old Vic and went on to Broadway."
+  }
+ ]
+}

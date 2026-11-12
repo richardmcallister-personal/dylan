@@ -8,7 +8,7 @@
     ["concerts", "/concerts/", "Shows", '<path d="M4 20h16M6 20V9l6-5 6 5v11"/><path d="M10 20v-5h4v5"/>'],
     ["journeys", "/journeys/", "Journeys", '<path d="M3 17c4 0 4-10 9-10s5 10 9 10"/><circle cx="3" cy="17" r="1.5"/><circle cx="21" cy="17" r="1.5"/>'],
   ];
-  const archiveNav = [["books", "/books/", "Books"], ["influences", "/influences/", "Influences"], ["timeline", "/timeline/", "Timeline"], ["gallery", "/gallery/", "Gallery"]];
+  const archiveNav = [["books", "/books/", "Books"], ["influences", "/influences/", "Influences"], ["timeline", "/timeline/", "Timeline"], ["genealogy", "/genealogy/", "Genealogy"], ["gallery", "/gallery/", "Gallery"]];
   const ic = (p) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
 
   D.esc = (s) => String(s == null ? "" : s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -101,7 +101,7 @@
       <div class="fbrand"><a class="fname" href="/"><span>Bob Dylan</span></a><small>Fan site</small>
         <p>The records, the songs and every show on record since 1956, kept by a fan.</p></div>
       <div class="fcols">
-        ${col("Listen", [["/albums/", "Albums"], ["/journeys/", "Listening journeys"], ["/songs/", "Songs"], ["/song/?s=like-a-rolling-stone", "One song, many lives"]])}
+        ${col("Listen", [["/albums/", "Albums"], ["/journeys/", "Listening journeys"], ["/songs/", "Songs"], ["/genealogy/", "Song genealogy"]])}
         ${col("Live", [["/concerts/#tour", "On tour"], ["/concerts/", "Shows by year"]])}
         ${col("Archive", [["/books/", "Books"], ["/influences/", "Influences"], ["/timeline/", "Timeline"], ["/gallery/", "Gallery"]])}
         ${col("Official", [["https://www.bobdylan.com/", "bobdylan.com"], ["https://www.bobdylan.com/on-tour/", "Tour and tickets"], ["https://www.bobdylancenter.com/", "Bob Dylan Center"], ["https://www.setlist.fm/setlists/bob-dylan-23d6b8d3.html", "setlist.fm"]])}

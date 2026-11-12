@@ -97,3 +97,13 @@ country from the names (fix-ups in its FIX and SPLIT tables), cuts 360 px webp t
 photo to a setlist.fm show by year + city/venue, and writes `site/data/gallery.json`. Page: decade chips, year and
 country selects, venue/city search, oldest/newest, year headers, lightbox (arrows, swipe, keys) with a Setlist link.
 Filters live in the URL (`?d=1960&y=1966&c=England&q=…&o=desc`). Re-run the builder after adding photos.
+
+## Song genealogy (12 Nov 2026)
+
+`/genealogy/` hub + a genealogy section on song pages. Hand-written histories live in `tools/lives_src.py`
+(roots, studio takes, outtakes, rearrangements, rewritten words, covers — described, never quoted);
+`tools/build_lives.py` writes `site/data/lives/<slug>.json` + `index.json`, filling setlist ids and venues for dated live
+entries. Like a Rolling Stone's file predates the source and is kept as is. Song pages also compute a stage history
+from the setlists for all 800 songs: first show, comebacks after 4+ years away (flagged when the gap spans 1974 or
+1986–87, missing from the data), latest show. The hub lists the longest comebacks across the catalogue.
+To add a song: add it to `lives_src.py`, run `python3 tools/build_lives.py`, check its warnings.

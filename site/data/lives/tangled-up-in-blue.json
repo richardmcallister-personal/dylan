@@ -1,0 +1,63 @@
+{
+ "song": "Tangled Up in Blue",
+ "intro": "The opening song of Blood on the Tracks and the one he has rewritten most openly. The story jumps between people, places and times, and Dylan has kept moving its pieces around for fifty years.",
+ "lives": [
+  {
+   "d": "1974-09",
+   "kind": "Studio",
+   "title": "The New York version",
+   "place": "A&R Studios, New York",
+   "note": "Recorded quietly with a small band, and pressed on the first test copies of the album. Released in 1991 on The Bootleg Series Vol. 1–3, and the full session on More Blood, More Tracks.",
+   "a": "more-blood-more-tracks-the-bootleg-series-vol-14"
+  },
+  {
+   "d": "1974-12-30",
+   "kind": "Studio",
+   "title": "Re-cut in Minneapolis",
+   "place": "Sound 80, Minneapolis",
+   "note": "Just before release he re-recorded it with local musicians his brother found, faster and brighter. This is the version on Blood on the Tracks, January 1975.",
+   "a": "blood-tracks",
+   "change": "New arrangement"
+  },
+  {
+   "d": "1975-11-13",
+   "kind": "Live",
+   "title": "Rolling Thunder",
+   "place": "New Haven Veterans Memorial Coliseum, New Haven",
+   "note": "Played in the acoustic part of the 1975 shows. Recordings from the tour came out in 2019.",
+   "a": "bob-dylan-the-rolling-thunder-revue-the-1975-live-recordings",
+   "id": "bd79506"
+  },
+  {
+   "d": "1984-07-07",
+   "kind": "Live",
+   "title": "Heavily revised",
+   "place": "Wembley Stadium, London",
+   "note": "Solo acoustic with many lines rewritten — some verses close to new. Dylan said he preferred the imagery. Released on Real Live.",
+   "a": "real-live",
+   "change": "New words",
+   "id": "6bd75eae"
+  },
+  {
+   "d": "1998",
+   "kind": "Live",
+   "title": "Never Ending Tour fixture",
+   "place": "Never Ending Tour",
+   "note": "In the late 1990s it was in nearly every show, usually acoustic with a long guitar coda, more than 100 times a year from 1998 to 2000."
+  },
+  {
+   "d": "2010",
+   "kind": "Live",
+   "title": "Still changing",
+   "place": "Never Ending Tour",
+   "note": "In the 2010s the words kept shifting from tour to tour, with whole verses reworked again.",
+   "change": "New words"
+  }
+ ],
+ "others": [
+  {
+   "who": "Jerry Garcia Band",
+   "note": "A long-running part of Garcia's live sets."
+  }
+ ]
+}
